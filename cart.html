@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Bag | Mimi by Maryam</title>
+    <link rel="stylesheet" href="Style.css">
+    <style>
+        .cart-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px 80px 20px;
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+        .cart-items-section {
+            flex: 1.6;
+        }
+        .cart-header-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eae6e1;
+            padding-bottom: 15px;
+        }
+        .cart-item-row {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eae6e1;
+            align-items: center;
+        }
+        .cart-item-img {
+            width: 95px;
+            height: 120px;
+            object-fit: cover;
+            background-color: #fafafa;
+        }
+        .cart-item-details {
+            flex: 1;
+        }
+        .cart-item-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #111111;
+            margin-bottom: 6px;
+        }
+        .cart-item-meta {
+            font-size: 13px;
+            color: #666666;
+            margin-bottom: 12px;
+        }
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .cart-qty-box {
+            display: flex;
+            border: 1px solid #eae6e1;
+            align-items: center;
+        }
+        .cart-qty-btn {
+            width: 30px;
+            height: 30px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        .cart-qty-num {
+            padding: 0 10px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .remove-item-btn {
+            background: none;
+            border: none;
+            color: #888888;
+            font-size: 12px;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .remove-item-btn:hover {
+            color: #111111;
+        }
+        .cart-item-subtotal {
+            font-size: 15px;
+            font-weight: bold;
+            color: #111111;
+        }
+        .order-summary-panel {
+            flex: 1;
+            background-color: #faf8f5;
+            padding: 30px;
+            border: 1px solid #eae6e1;
+        }
+        .summary-title {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eae6e1;
+            padding-bottom: 12px;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 14px;
+            color: #444444;
+        }
+        .shipping-note {
+            font-size: 11px;
+            color: #777777;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 17px;
+            font-weight: bold;
+            color: #111111;
+            border-top: 1px solid #eae6e1;
+            padding-top: 15px;
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+        .checkout-form-group {
+            margin-bottom: 15px;
+        }
+        .checkout-form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .checkout-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #dcdcdc;
+            font-size: 13px;
+            background-color: #ffffff;
+        }
+        .payment-options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 6px;
+        }
+        .payment-option-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border: 1px solid #dcdcdc;
+            background-color: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            text-transform: none;
+        }
+        .payment-option-label:hover {
+            border-color: #222222;
+        }
+        .bank-details-box {
+            display: none;
+            background-color: #ffffff;
+            border: 1px solid #eae6e1;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .checkout-btn {
+            width: 100%;
+            background-color: #1a1715;
+            color: #ffffff;
+            border: none;
+            padding: 16px;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+        .checkout-btn:hover {
+            background-color: #f7cbd7;
+            color: #111111;
+        }
+        .empty-bag-msg {
+            padding: 40px 0;
+            text-align: center;
+            color: #666666;
+            font-size: 15px;
+        }
+        @media (max-width: 850px) {
+            .cart-container {
+                flex-direction: column;
+            }
+            .order-summary-panel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="announcement-bar">
+        EXTRA 2% OFF WITH PREPAID ORDERS | FREE SHIPPING OVER RS. 5,000
+    </div>
+
+    <div class="product-page-nav">
+        <a href="MIMI BY MARYAM.html" class="back-link">← Continue Shopping</a>
+    </div>
+
+    <main class="cart-container">
+        <!-- Left Side: List of Added Dresses -->
+        <section class="cart-items-section">
+            <h1 class="cart-header-title">Your Shopping Bag</h1>
+            <div id="cart-items-container"></div>
+        </section>
+
+        <!-- Right Side: Totals & Checkout Form -->
+        <aside class="order-summary-panel" id="summary-panel">
+            <h2 class="summary-title">Order Summary</h2>
+            
+            <div class="checkout-form-group">
+                <label>Delivery Region *</label>
+                <select id="shipping-zone" class="checkout-input">
+                    <option value="local">Same-City Delivery (PKR 115 – 149 per order)</option>
+                    <option value="intercity" selected>Inter-City / Cross-Province (PKR 199 – 249 per order)</option>
+                </select>
+            </div>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">Rs. 0.00</span>
+            </div>
+            <div class="summary-row">
+                <span>Shipping Charges</span>
+                <span id="cart-shipping">Free</span>
+            </div>
+            <p class="shipping-note" id="shipping-info-note">
+                Free shipping automatically applied on orders over Rs. 5,000!
+            </p>
+
+            <div class="summary-row" id="discount-row" style="display: none; color: #b85d79; font-weight: bold;">
+                <span>Prepaid Discount (2%)</span>
+                <span id="cart-discount">- Rs. 0.00</span>
+            </div>
+
+            <div class="summary-total">
+                <span>Total</span>
+                <span id="cart-total">Rs. 0.00</span>
+            </div>
+
+            <form id="checkout-form">
+                <div class="checkout-form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="cust-name" class="checkout-input" placeholder="Enter your full name" required>
+                </div>
+                <div class="checkout-form-group">
+                    <label>Phone Number (WhatsApp) *</label>
+                    <input type="tel" id="cust-phone" class="checkout-input" placeholder="03XX-XXXXXXX" required>
+                </div>
+                <div class="checkout-form-group">
+                    <label>City & Delivery Address *</label>
+                    <input type="text" id="cust-address" class="checkout-input" placeholder="House #, Street, City" required>
+                </div>
+
+                <div class="checkout-form-group">
+                    <label>Payment Method *</label>
+                    <div class="payment-options-group">
+                        <label class="payment-option-label">
+                            <input type="radio" name="payment-method" value="COD" checked>
+                            <span>Cash on Delivery (COD)</span>
+                        </label>
+                        <label class="payment-option-label">
+                            <input type="radio" name="payment-method" value="Bank Transfer">
+                            <span>Bank Transfer / Raast (Extra 2% Off)</span>
+                        </label>
+                    </div>
+
+                    <div class="bank-details-box" id="bank-details-box">
+                        <strong>Send Payment To:</strong><br>
+                        Bank Name: Meezan Bank / JazzCash / Raast<br>
+                        Account Title: Mimi by Maryam<br>
+                        Account / IBAN: PK00MEZN0000000000000000<br><br>
+
+                        <div class="checkout-form-group" style="margin-bottom: 10px;">
+                            <label>Your Account Title / Sender Name *</label>
+                            <input type="text" id="sender-name" class="checkout-input" placeholder="Name on your bank / JazzCash / EasyPaisa">
+                        </div>
+                        <div class="checkout-form-group" style="margin-bottom: 6px;">
+                            <label>Transaction ID (TID) / Reference # *</label>
+                            <input type="text" id="transaction-id" class="checkout-input" placeholder="Enter TID from your payment receipt">
+                        </div>
+                        <em>You can also share the receipt screenshot on WhatsApp (+92 310 0064795).</em>
+                    </div>
+                </div>
+
+                <button type="submit" class="checkout-btn" id="place-order-btn">PROCEED TO CHECKOUT</button>
+            </form>
+        </aside>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const API_BASE = "/api";
+            const cartContainer = document.getElementById('cart-items-container');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const shippingEl = document.getElementById('cart-shipping');
+            const shippingNoteEl = document.getElementById('shipping-info-note');
+            const totalEl = document.getElementById('cart-total');
+            const summaryPanel = document.getElementById('summary-panel');
+            const shippingZoneSelect = document.getElementById('shipping-zone');
+            const paymentRadios = document.querySelectorAll('input[name="payment-method"]');
+            const bankDetailsBox = document.getElementById('bank-details-box');
+            const discountRow = document.getElementById('discount-row');
+            const discountEl = document.getElementById('cart-discount');
+            const senderNameInput = document.getElementById('sender-name');
+            const transactionIdInput = document.getElementById('transaction-id');
+
+            function parsePrice(priceStr) {
+                const cleanString = priceStr.replace(/^Rs\.?\s*/i, '').replace(/,/g, '').trim();
+                return parseFloat(cleanString) || 0;
+            }
+
+            function formatPrice(num) {
+                return "Rs. " + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+
+            function renderCart() {
+                const cart = JSON.parse(localStorage.getItem('mimi_cart')) || [];
+                cartContainer.innerHTML = "";
+
+                if (cart.length === 0) {
+                    cartContainer.innerHTML = `
+                        <div class="empty-bag-msg">
+                            <p style="margin-bottom: 20px;">Your shopping bag is currently empty.</p>
+                            <a href="MIMI BY MARYAM.html" class="cta-button">Browse Dresses</a>
+                        </div>
+                    `;
+                    summaryPanel.style.display = "none";
+                    return;
+                }
+
+                summaryPanel.style.display = "block";
+                let subtotal = 0;
+
+                cart.forEach((item, index) => {
+                    const unitPrice = parsePrice(item.price);
+                    const itemTotal = unitPrice * item.quantity;
+                    subtotal += itemTotal;
+
+                    const row = document.createElement('div');
+                    row.className = 'cart-item-row';
+                    row.innerHTML = `
+                        <img src="${item.image}" alt="${item.title}" class="cart-item-img">
+                        <div class="cart-item-details">
+                            <div class="cart-item-title">${item.title}</div>
+                            <div class="cart-item-meta">Size: ${item.size} &nbsp;|&nbsp; Unit Price: ${item.price}</div>
+                            <div class="cart-item-controls">
+                                <div class="cart-qty-box">
+                                    <button type="button" class="cart-qty-btn" onclick="updateQty(${index}, -1)">-</button>
+                                    <span class="cart-qty-num">${item.quantity}</span>
+                                    <button type="button" class="cart-qty-btn" onclick="updateQty(${index}, 1)">+</button>
+                                </div>
+                                <button type="button" class="remove-item-btn" onclick="removeItem(${index})">Remove</button>
+                            </div>
+                        </div>
+                        <div class="cart-item-subtotal">${formatPrice(itemTotal)}</div>
+                    `;
+                    cartContainer.appendChild(row);
+                });
+
+                const selectedZone = shippingZoneSelect.value;
+                const flatShippingRate = selectedZone === "local" ? 130 : 225;
+                let shipping = 0;
+
+                if (subtotal > 5000) {
+                    shipping = 0;
+                    shippingEl.textContent = "Free";
+                    shippingNoteEl.textContent = "Free shipping applied (Order over Rs. 5,000).";
+                } else {
+                    shipping = flatShippingRate;
+                    shippingEl.textContent = formatPrice(shipping);
+                    shippingNoteEl.textContent = selectedZone === "local"
+                        ? "Flat local same-city shipping: PKR 115–149 per order (Free over Rs. 5,000)."
+                        : "Flat inter-city shipping: PKR 199–249 per order (Free over Rs. 5,000).";
+                }
+
+                const selectedPayment = document.querySelector('input[name="payment-method"]:checked').value;
+                let discount = 0;
+
+                if (selectedPayment === "Bank Transfer") {
+                    discount = subtotal * 0.02;
+                    discountRow.style.display = "flex";
+                    discountEl.textContent = "- " + formatPrice(discount);
+                } else {
+                    discountRow.style.display = "none";
+                }
+
+                const grandTotal = (subtotal - discount) + shipping;
+                subtotalEl.textContent = formatPrice(subtotal);
+                totalEl.textContent = formatPrice(grandTotal);
+            }
+
+            shippingZoneSelect.addEventListener('change', renderCart);
+
+            paymentRadios.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    const selectedPayment = document.querySelector('input[name="payment-method"]:checked').value;
+                    const isBankTransfer = selectedPayment === "Bank Transfer";
+                    bankDetailsBox.style.display = isBankTransfer ? "block" : "none";
+                    senderNameInput.required = isBankTransfer;
+                    transactionIdInput.required = isBankTransfer;
+                    renderCart();
+                });
+            });
+
+            window.updateQty = function(index, change) {
+                let cart = JSON.parse(localStorage.getItem('mimi_cart')) || [];
+                if (cart[index]) {
+                    cart[index].quantity += change;
+                    if (cart[index].quantity <= 0) cart.splice(index, 1);
+                    localStorage.setItem('mimi_cart', JSON.stringify(cart));
+                    renderCart();
+                }
+            };
+
+            window.removeItem = function(index) {
+                let cart = JSON.parse(localStorage.getItem('mimi_cart')) || [];
+                cart.splice(index, 1);
+                localStorage.setItem('mimi_cart', JSON.stringify(cart));
+                renderCart();
+            };
+
+            document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const cart = JSON.parse(localStorage.getItem('mimi_cart')) || [];
+                const name = document.getElementById('cust-name').value.trim();
+                const phone = document.getElementById('cust-phone').value.trim();
+                const address = document.getElementById('cust-address').value.trim();
+                const zone = shippingZoneSelect.options[shippingZoneSelect.selectedIndex].text;
+                const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+                const finalTotal = totalEl.textContent;
+                const senderName = paymentMethod === "Bank Transfer" ? senderNameInput.value.trim() : "N/A";
+                const tid = paymentMethod === "Bank Transfer" ? transactionIdInput.value.trim() : "N/A";
+
+                const newOrder = {
+                    orderId: "MM-" + Math.floor(100000 + Math.random() * 900000),
+                    date: new Date().toLocaleString('en-PK'),
+                    customerName: name,
+                    phone: phone,
+                    address: address,
+                    deliveryZone: zone,
+                    paymentMethod: paymentMethod,
+                    senderName: senderName,
+                    transactionId: tid,
+                    items: cart,
+                    totalAmount: finalTotal,
+                    status: "Pending"
+                };
+
+                try {
+                    const response = await fetch(`${API_BASE}/orders`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newOrder)
+                    });
+                    if (!response.ok) throw new Error("Server error");
+                } catch (err) {
+                    let existingOrders = JSON.parse(localStorage.getItem('mimi_orders')) || [];
+                    existingOrders.unshift(newOrder);
+                    localStorage.setItem('mimi_orders', JSON.stringify(existingOrders));
+                }
+
+                let paymentInfoText = `Payment Method: ${paymentMethod}`;
+                if (paymentMethod === "Bank Transfer") {
+                    paymentInfoText += `\nSender Account: ${senderName}\nTransaction ID: ${tid}`;
+                }
+
+                alert(`Thank you, ${name}! Your order #${newOrder.orderId} (${finalTotal}) has been placed.\n\n${paymentInfoText}\nPhone: ${phone}\nAddress: ${address}\n\nWe will confirm your order via WhatsApp shortly.`);
+                localStorage.removeItem('mimi_cart');
+                window.location.href = "MIMI BY MARYAM.html";
+            });
+
+            renderCart();
+        });
+    </script>
+</body>
+</html>
