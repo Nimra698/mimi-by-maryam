@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="product-page-tab-title">Mimi by Maryam | Premium Boutique Collection</title>
+    <link rel="stylesheet" href="Style.css">
+</head>
+<body>
+
+    <div class="product-page-nav" style="display: flex; justify-content: space-between; align-items: center;">
+        <a href="MIMI BY MARYAM.html" class="back-link">← Back to Collection</a>
+        <a href="cart.html" class="cart-btn">Bag (0)</a>
+    </div>
+
+    <main class="product-detail-container">
+        <section class="product-media-gallery">
+            <div class="main-display-window">
+                <img id="main-product-image" src="placeholder.jpg" alt="Loading Product Image" class="product-img-fluid"> 
+            </div>
+        </section>
+
+        <section class="product-buying-panel">
+            <span class="stock-warning"></span>
+            
+            <h1 id="product-page-title" class="product-title-code">Loading Product...</h1>
+            <p id="product-page-price" class="product-price-tag">Calculating Price...</p>
+
+            <div class="size-selection-area">
+                <div class="size-header">
+                    <span>Size:</span>
+                    <a href="#" class="size-chart-trigger">📏 Size Chart</a>
+                </div>
+                <div class="size-tiles-grid">
+                    <button type="button" class="size-tile">1-2 yr</button>
+                    <button type="button" class="size-tile">3-4 yr</button>
+                    <button type="button" class="size-tile">5-6 yr</button>
+                    <button type="button" class="size-tile">7-8 yr</button>
+                    <button type="button" class="size-tile active-size">9-10 yr</button>
+                </div>
+            </div>
+
+            <div class="purchase-actions-row">
+                <div class="qty-stepper-box">
+                    <button type="button" class="qty-btn" id="qty-minus">-</button>
+                    <input type="number" id="qty-count" value="1" class="qty-input-field" readonly>
+                    <button type="button" class="qty-btn" id="qty-plus">+</button>
+                </div>
+                <button type="button" class="add-to-cart-cta" id="add-to-cart-btn">ADD TO CART</button>
+            </div>
+
+            <div class="product-description-details" style="margin-bottom: 30px; border-top: 1px solid #eae6e1; padding-top: 20px;">
+                <h3 style="font-size: 14px; font-weight: bold; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Product Overview</h3>
+                <ul id="dynamic-product-details-list" style="padding-left: 20px; color: #555555; font-size: 13px; line-height: 1.6;">
+                </ul>
+            </div>
+
+            <div class="shipping-info-accordion">
+                <h3>Delivery & Shipping Information</h3>
+                <ul>
+                    <li><strong>Same-City Local Delivery:</strong> PKR 115–149 (up to 0.5 kg).</li>
+                    <li><strong>Inter-City & Cross-Province:</strong> PKR 199–249 (up to 0.5 kg).</li>
+                    <li><strong>Free Shipping:</strong> Automatically applied on all orders over Rs. 5,000.</li>
+                    <li>Each designer outfit is steamed, handled with care, and securely packaged to arrive in perfect condition.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Kids Size Chart Popup Modal -->
+    <div id="size-chart-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.55); z-index: 2000; justify-content: center; align-items: center; padding: 20px;">
+        <div style="background-color: #ffffff; max-width: 580px; width: 100%; padding: 35px 30px; border: 1px solid #eae6e1; position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);">
+            <button type="button" id="close-size-modal" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 22px; cursor: pointer; color: #222222;">✕</button>
+            <h2 style="font-size: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; color: #111111;">Kids Boutique Size Guide</h2>
+            <p style="font-size: 12px; color: #777777; margin-bottom: 20px;">All garment measurements are listed in inches.</p>
+
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: center;">
+                <thead>
+                    <tr style="background-color: #faf8f5;">
+                        <th style="padding: 12px 8px; border: 1px solid #eae6e1; font-size: 11px; text-transform: uppercase;">Age / Size</th>
+                        <th style="padding: 12px 8px; border: 1px solid #eae6e1; font-size: 11px; text-transform: uppercase;">Shirt Length</th>
+                        <th style="padding: 12px 8px; border: 1px solid #eae6e1; font-size: 11px; text-transform: uppercase;">Chest</th>
+                        <th style="padding: 12px 8px; border: 1px solid #eae6e1; font-size: 11px; text-transform: uppercase;">Sleeve</th>
+                        <th style="padding: 12px 8px; border: 1px solid #eae6e1; font-size: 11px; text-transform: uppercase;">Trouser Length</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;"><strong>1-2 yr</strong></td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">18"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">22"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">11"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">19"</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;"><strong>3-4 yr</strong></td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">21"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">24"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">13"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">22"</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;"><strong>5-6 yr</strong></td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">24"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">26"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">15"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">25"</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;"><strong>7-8 yr</strong></td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">27"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">28"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">17"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">28"</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;"><strong>9-10 yr</strong></td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">30"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">30"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">19"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">31"</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="font-size: 11px; color: #777777; margin-top: 15px; line-height: 1.5;">
+                * Note: Custom sizing is also available. Contact us on WhatsApp at <strong>+92 310 0064795</strong> for tailored measurements.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const boutiqueInventory = {
+                "black-silk": {
+                    title: "Elegance Festive Edit – Black Silk Suit",
+                    price: "Rs. 3,500.00",
+                    mainImg: "blackmodel.jpeg",
+                    details: [
+                        "Fabric: Premium Raw Silk shirt and trousers paired with an organza dupatta.",
+                        "Detailing: Exquisite hand-crafted embroidery accent pieces with mirror accents on the front profile.",
+                        "Set Includes: Shirt, Dupatta, and Trouser pants.",
+                        "Care: Dry clean recommended. Do not iron directly over embellishments."
+                    ]
+                },
+                "magenta-silk": {
+                    title: "Elegance Floral Edit – Magenta Silk Shirt & Crushed Plazo Set",
+                    price: "Rs. 4,500.00",
+                    mainImg: "pink.jpg",
+                    details: [
+                        "Fabric: High-grade pure Shamooz silk with crushed crepe plazo layers.",
+                        "Detailing: Statement hand-tied silk ribbon accent bow and white micro-bead embroidery layout.",
+                        "Set Includes: Long tunic shirt and wide-leg crushed plazo pants.",
+                        "Care: Dry clean only. Steam iron inside out on low heat settings."
+                    ]
+                },
+                "beige-silk": {
+                    title: "Elegance Floral Edit – Beige Silk Co-Ord Set",
+                    price: "Rs. 3,450.00",
+                    mainImg: "skinmodel.jpg",
+                    details: [
+                        "Fabric: Ultra-soft viscose silk blend perfect for lightweight seasonal wear.",
+                        "Design: Minimalist premium co-ord construction layout with clean border stitching finishes.",
+                        "Set Includes: Dual matching button-down top and comfortable trouser set.",
+                        "Care: Machine wash cold on delicate cycle. Tumble dry low or air dry."
+                    ]
+                },
+                "plaid-shirt": {
+                    title: "Elegance Plaid Edit – Shirt & White Trousers",
+                    price: "Rs. 4,500.00",
+                    mainImg: "brownmodel.jpg",
+                    details: [
+                        "Fabric: Breathable premium organic cotton plaid knit shirt paired with linen-blend trousers.",
+                        "Design: Chic checkered patterned button-up shirt featuring contrasting white trousers.",
+                        "Set Includes: Casual plaid shirt and slim-fit elasticated white pants.",
+                        "Care: Warm wash inside out with similar colors. Warm iron if needed."
+                    ]
+                },
+                "mint": {
+                    title: "Elegance Floral Edit – Mint Green Suit",
+                    price: "Rs. 3,000.00",
+                    mainImg: "greenmodel.jpg",
+                    details: [
+                        "Fabric: Premium cotton-silk raw base tailored cleanly for kids comfort.",
+                        "Detailing: Fine floral pastel needlework arrangement outlining the neckline and hem.",
+                        "Set Includes: Mid-length lawn shirt, matching dupatta wrap, and comfort shalwar pants.",
+                        "Care: Gentle hand wash in cold water using gentle liquid soap. Dry in shade."
+                    ]
+                },
+                "vibrant-multi": {
+                    title: "Elegance Vibrant Edit – Multicolored 2 Piece Suit",
+                    price: "Rs. 3,500.00",
+                    mainImg: "multimodel.jpg",
+                    details: [
+                        "Fabric: High-definition digitally printed premium Cambric cotton.",
+                        "Design: Vibrant multi-colored abstract patchwork geometric pattern grid.",
+                        "Set Includes: Mod structured kameez top tunic and matching print cigarette trousers.",
+                        "Care: Do not use chlorine bleach agents. Iron on medium setting."
+                    ]
+                }
+            };
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const dressId = urlParams.get('dress');
+
+            // Fetch admin-added suits from server.js (/api/products)
+            let customProducts = [];
+            try {
+                const response = await fetch('http://localhost:3000/api/products');
+                if (response.ok) {
+                    customProducts = await response.json();
+                }
+            } catch (err) {
+                customProducts = JSON.parse(localStorage.getItem('mimi_custom_products')) || [];
+            }
+
+            customProducts.forEach(prod => {
+                boutiqueInventory[prod.id] = {
+                    title: prod.title,
+                    price: prod.price,
+                    mainImg: prod.mainImg,
+                    details: prod.details || []
+                };
+            });
+
+            if (dressId && boutiqueInventory[dressId]) {
+                const item = boutiqueInventory[dressId];
+                document.getElementById('product-page-title').textContent = item.title;
+                document.getElementById('product-page-price').textContent = item.price;
+                document.getElementById('main-product-image').src = item.mainImg;
+                document.getElementById('main-product-image').alt = item.title;
+                document.getElementById('product-page-tab-title').textContent = item.title + " | Mimi by Maryam";
+
+                const detailsList = document.getElementById('dynamic-product-details-list');
+                detailsList.innerHTML = "";
+                item.details.forEach(text => {
+                    const li = document.createElement('li');
+                    li.style.marginBottom = "8px";
+                    li.textContent = text;
+                    detailsList.appendChild(li);
+                });
+            }
+
+            // Size Selection
+            const sizeTiles = document.querySelectorAll('.size-tile');
+            let selectedSize = "9-10 yr";
+
+            sizeTiles.forEach(tile => {
+                tile.addEventListener('click', () => {
+                    sizeTiles.forEach(t => t.classList.remove('active-size'));
+                    tile.classList.add('active-size');
+                    selectedSize = tile.textContent.trim();
+                });
+            });
+
+            // Quantity Stepper
+            const minusBtn = document.getElementById('qty-minus');
+            const plusBtn = document.getElementById('qty-plus');
+            const qtyInput = document.getElementById('qty-count');
+
+            plusBtn.addEventListener('click', () => {
+                let value = parseInt(qtyInput.value) || 1;
+                if (value < 10) qtyInput.value = value + 1;
+            });
+
+            minusBtn.addEventListener('click', () => {
+                let value = parseInt(qtyInput.value) || 1;
+                if (value > 1) qtyInput.value = value - 1;
+            });
+
+            // Update Bag Counter Badge
+            function updateBagBadge() {
+                const cart = JSON.parse(localStorage.getItem('mimi_cart')) || [];
+                const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const bagBtn = document.querySelector('.cart-btn');
+                if (bagBtn) bagBtn.textContent = `Bag (${totalQty})`;
+            }
+            updateBagBadge();
+
+            // Add to Cart Button
+            const addToCartBtn = document.getElementById('add-to-cart-btn');
+            addToCartBtn.addEventListener('click', () => {
+                if (!dressId || !boutiqueInventory[dressId]) {
+                    alert("Please open a product from the home page first.");
+                    return;
+                }
+
+                const currentProduct = boutiqueInventory[dressId];
+                const cartItem = {
+                    id: dressId,
+                    title: currentProduct.title,
+                    price: currentProduct.price,
+                    image: currentProduct.mainImg,
+                    size: selectedSize,
+                    quantity: parseInt(qtyInput.value) || 1
+                };
+
+                let cart = JSON.parse(localStorage.getItem('mimi_cart')) || [];
+                const existingIndex = cart.findIndex(item => item.id === cartItem.id && item.size === cartItem.size);
+
+                if (existingIndex > -1) {
+                    cart[existingIndex].quantity += cartItem.quantity;
+                } else {
+                    cart.push(cartItem);
+                }
+
+                localStorage.setItem('mimi_cart', JSON.stringify(cart));
+                updateBagBadge();
+                alert(`${cartItem.quantity}x ${cartItem.title} (${cartItem.size}) added to your bag!`);
+            });
+
+            // Size Chart Modal Open & Close
+            const trigger = document.querySelector('.size-chart-trigger');
+            const modal = document.getElementById('size-chart-modal');
+            const closeBtn = document.getElementById('close-size-modal');
+
+            if (trigger && modal) {
+                trigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    modal.style.display = 'flex';
+                });
+
+                closeBtn.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                });
+
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
