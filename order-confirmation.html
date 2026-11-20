@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://googleapis.com" rel="stylesheet">
+    <title>Order Confirmed | MIMI BY MARYAM</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #faf9f7;
+            color: #1a1715;
+            padding-bottom: 50px;
+        }
+
+        /* Brand Header */
+        .confirm-header {
+            background: #ffffff;
+            border-bottom: 1px solid #eae6e1;
+            padding: 16px 20px;
+            text-align: center;
+        }
+        .confirm-header img {
+            height: 60px;
+            width: auto;
+        }
+
+        /* Collapsible Order Summary Bar (Top) */
+        .summary-toggle-bar {
+            background: #f5f2ee;
+            border-bottom: 1px solid #eae6e1;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 650px;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+        .summary-toggle-bar span {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1715;
+        }
+        .summary-total-price {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .summary-items-box {
+            display: none;
+            background: #ffffff;
+            border-bottom: 1px solid #eae6e1;
+            padding: 16px 20px;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        .summary-items-box.open { display: block; }
+        .summary-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f2efeb;
+            font-size: 13px;
+        }
+        .summary-item-row:last-child { border-bottom: none; }
+
+        /* Main Container */
+        .confirm-container {
+            max-width: 650px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        /* Thank You Banner with Checkmark */
+        .thank-you-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .check-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #1a1715;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+            background: #ffffff;
+        }
+        .order-number {
+            font-size: 12px;
+            color: #666666;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+        .thank-you-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111111;
+        }
+
+        /* White Info Cards */
+        .info-card {
+            background: #ffffff;
+            border: 1px solid #e5e1dc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .info-card h2 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #111111;
+        }
+        .info-card p {
+            font-size: 13px;
+            color: #555555;
+            line-height: 1.55;
+        }
+        .info-subheading {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1715;
+            margin-top: 14px;
+            margin-bottom: 4px;
+        }
+
+        /* Action Buttons */
+        .whatsapp-track-btn {
+            display: block;
+            width: 100%;
+            margin-top: 14px;
+            padding: 12px;
+            background: #ffffff;
+            border: 1px solid #d4cfc9;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1715;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .whatsapp-track-btn:hover {
+            background: #faf6f3;
+        }
+
+        .continue-shopping-btn {
+            display: block;
+            width: 100%;
+            margin-top: 22px;
+            padding: 15px;
+            background: #1a1715;
+            color: #ffffff;
+            text-align: center;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-radius: 6px;
+        }
+        .continue-shopping-btn:hover {
+            background: #f7cbd7;
+            color: #1a1715;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Brand Logo Header -->
+    <header class="confirm-header">
+        <a href="MIMI BY MARYAM.html">
+            <img src="d.jpg" alt="MIMI BY MARYAM">
+        </a>
+    </header>
+
+    <!-- Top Order Summary Bar -->
+    <div class="summary-toggle-bar" onclick="toggleSummary()">
+        <span>Order summary <span id="summary-arrow">⌄</span></span>
+        <span class="summary-total-price" id="display-grand-total">Rs. 0.00</span>
+    </div>
+    <div class="summary-items-box" id="summary-items-box"></div>
+
+    <!-- Main Confirmation Content -->
+    <main class="confirm-container">
+        <div class="thank-you-header">
+            <div class="check-circle">✓</div>
+            <div>
+                <div class="order-number" id="display-order-id">Confirmation #MBM1001</div>
+                <div class="thank-you-title" id="display-thank-you">Thank you!</div>
+            </div>
+        </div>
+
+        <!-- Card 1: Confirmation Message -->
+        <div class="info-card">
+            <h2>Your order is confirmed</h2>
+            <p>We’ve received your order and our boutique team is preparing your little princess's outfit with care.</p>
+        </div>
+
+        <!-- Card 2: Order Updates -->
+        <div class="info-card">
+            <h2>Order updates</h2>
+            <p>You’ll receive shipping and delivery updates on WhatsApp or SMS once your parcel is dispatched.</p>
+            <a id="whatsapp-confirm-link" href="https://wa.me" target="_blank" class="whatsapp-track-btn">
+                💬 Get order updates on WhatsApp
+            </a>
+        </div>
+
+        <!-- Card 3: Order Details -->
+        <div class="info-card">
+            <h2>Order details</h2>
+            
+            <div class="info-subheading">Contact information</div>
+            <p id="display-contact">—</p>
+
+            <div class="info-subheading">Shipping address</div>
+            <p id="display-address">—</p>
+
+            <div class="info-subheading">Payment method</div>
+            <p id="display-payment">Cash on Delivery (COD)</p>
+        </div>
+
+        <a href="MIMI BY MARYAM.html" class="continue-shopping-btn">Continue Shopping</a>
+    </main>
+
+    <script>
+        function toggleSummary() {
+            const box = document.getElementById('summary-items-box');
+            const arrow = document.getElementById('summary-arrow');
+            box.classList.toggle('open');
+            arrow.textContent = box.classList.contains('open') ? '⌃' : '⌄';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const orderData = JSON.parse(localStorage.getItem('mimi_last_order'));
+
+            if (!orderData) {
+                return;
+            }
+
+            // Generate clean confirmation code if not provided
+            const orderCode = orderData.orderId || ('MBM' + Math.floor(100000 + Math.random() * 900000));
+            const firstName = (orderData.customerName || 'Valued Customer').split(' ')[0];
+
+            document.getElementById('display-order-id').textContent = `Confirmation #${orderCode}`;
+            document.getElementById('display-thank-you').textContent = `Thank you, ${firstName}!`;
+            document.getElementById('display-grand-total').textContent = orderData.totalAmount || 'Rs. 0.00';
+
+            // Contact & Address
+            const contactText = [orderData.phone, orderData.email].filter(Boolean).join(' • ');
+            document.getElementById('display-contact').textContent = contactText || orderData.customerName;
+            document.getElementById('display-address').textContent = `${orderData.customerName}, ${orderData.address}${orderData.city ? ', ' + orderData.city : ''}`;
+            document.getElementById('display-payment').textContent = orderData.paymentMethod || 'Cash on Delivery (COD)';
+
+            // Render purchased items in top dropdown
+            const itemsBox = document.getElementById('summary-items-box');
+            if (orderData.items && orderData.items.length > 0) {
+                itemsBox.innerHTML = orderData.items.map(item => `
+                    <div class="summary-item-row">
+                        <span><strong>${item.quantity}x</strong> ${item.title} (${item.size})</span>
+                        <span>${item.price}</span>
+                    </div>
+                `).join('');
+            }
+
+            // Pre-fill WhatsApp tracking button
+            const waText = encodeURIComponent(`Assalam-o-Alaikum Mimi by Maryam! My order #${orderCode} (${orderData.customerName}) has been placed. Please share tracking updates.`);
+            document.getElementById('whatsapp-confirm-link').href = `https://wa.me?text=${waText}`;
+        });
+    </script>
+</body>
+</html>

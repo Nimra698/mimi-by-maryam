@@ -2,13 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- 1. Mobile screen par website ko fit karne ke liye -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- 2. Official luxury brand fonts ke liye -->
     <link href="https://googleapis.com" rel="stylesheet">
-    
-    <title>MIMI BY MARYAM</title>
+    <title>Shopping Bag | MIMI BY MARYAM</title>
     <link rel="stylesheet" href="Style.css">
     <style>
         .cart-container {
@@ -21,6 +17,7 @@
         }
         .cart-items-section {
             flex: 1.6;
+            width: 100%;
         }
         .cart-header-title {
             font-size: 24px;
@@ -43,6 +40,7 @@
             height: 120px;
             object-fit: cover;
             background-color: #fafafa;
+            flex-shrink: 0;
         }
         .cart-item-details {
             flex: 1;
@@ -150,7 +148,7 @@
             width: 100%;
             padding: 10px 12px;
             border: 1px solid #dcdcdc;
-            font-size: 13px;
+            font-size: 14px;
             background-color: #ffffff;
         }
         .payment-options-group {
@@ -211,9 +209,33 @@
         @media (max-width: 850px) {
             .cart-container {
                 flex-direction: column;
+                margin: 20px auto;
+                padding: 0 14px 50px 14px;
+                gap: 24px;
             }
             .order-summary-panel {
                 width: 100%;
+                padding: 20px 16px;
+            }
+            .cart-header-title {
+                font-size: 19px;
+            }
+            .cart-item-row {
+                gap: 12px;
+                align-items: flex-start;
+            }
+            .cart-item-img {
+                width: 75px;
+                height: 98px;
+            }
+            .cart-item-title {
+                font-size: 13px;
+            }
+            .cart-item-meta {
+                font-size: 12px;
+            }
+            .cart-item-subtotal {
+                font-size: 13px;
             }
         }
     </style>
@@ -314,7 +336,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="checkout-btn" id="place-order-btn">PROCEED TO CHECKOUT</button>
+                <button type="submit" class="checkout-btn" id="place-order-btn">PLACE ORDER</button>
             </form>
         </aside>
     </main>
@@ -337,7 +359,7 @@
             const transactionIdInput = document.getElementById('transaction-id');
 
             function parsePrice(priceStr) {
-                const cleanString = priceStr.replace(/^Rs\.?\s*/i, '').replace(/,/g, '').trim();
+                const cleanString = String(priceStr).replace(/^Rs\.?\s*/i, '').replace(/,/g, '').trim();
                 return parseFloat(cleanString) || 0;
             }
 
@@ -453,6 +475,10 @@
 
             document.getElementById('checkout-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
+                const placeBtn = document.getElementById('place-order-btn');
+                placeBtn.disabled = true;
+                placeBtn.textContent = "PLACING ORDER...";
+
                 const cart = JSON.parse(localStorage.getItem('mimi_cart')) || [];
                 const name = document.getElementById('cust-name').value.trim();
                 const phone = document.getElementById('cust-phone').value.trim();
@@ -491,14 +517,10 @@
                     localStorage.setItem('mimi_orders', JSON.stringify(existingOrders));
                 }
 
-                let paymentInfoText = `Payment Method: ${paymentMethod}`;
-                if (paymentMethod === "Bank Transfer") {
-                    paymentInfoText += `\nSender Account: ${senderName}\nTransaction ID: ${tid}`;
-                }
-
-                alert(`Thank you, ${name}! Your order #${newOrder.orderId} (${finalTotal}) has been placed.\n\n${paymentInfoText}\nPhone: ${phone}\nAddress: ${address}\n\nWe will confirm your order via WhatsApp shortly.`);
+                // Save order for the Thank You page, clear bag, and redirect
+                localStorage.setItem('mimi_last_order', JSON.stringify(newOrder));
                 localStorage.removeItem('mimi_cart');
-                window.location.href = "MIMI BY MARYAM.html";
+                window.location.href = "order-confirmation.html";
             });
 
             renderCart();
