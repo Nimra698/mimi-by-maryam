@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <!-- 1. Mobile screen par website ko fit karne ke liye -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -356,6 +356,28 @@
                 });
             }
         });
+        // 1. When a size button is clicked:
+function selectSize(btn, sizeLabel, priceValue) {
+  // Remove active class from all size buttons
+  document.querySelectorAll('.size-tile').forEach(tile => {
+    tile.classList.remove('active-size');
+  });
+
+  // Highlight clicked size button
+  btn.classList.add('active-size');
+  selectedSize = sizeLabel;
+  selectedPrice = priceValue;
+
+  // Update displayed price
+  document.getElementById('product-price').innerText = `Rs. ${priceValue.toLocaleString()}`;
+
+  // Enable the Add to Cart button
+  const addBtn = document.getElementById('add-to-cart-btn');
+  addBtn.disabled = false;
+  addBtn.style.backgroundColor = '#1a1715';
+  addBtn.style.cursor = 'pointer';
+}
+
     </script>
 </body>
 </html>
