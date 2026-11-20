@@ -2,24 +2,101 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Reads your MongoDB link safely from Render Environment Variables (keeps your password private)
+// Reads your MongoDB link safely from Render Environment Variables
 const MONGO_URI = process.env.MONGO_URI;
 
 // Middleware
 app.use(cors());
-// Allows up to 10MB so suit photos from admin.html upload cleanly
 app.use(express.json({ limit: '10mb' }));
-// Serves your HTML, CSS, JS, and image files directly
 app.use(express.static(__dirname));
 
 // Connect to MongoDB Atlas
 mongoose.connect(MONGO_URI)
     .then(() => console.log('Connected to MongoDB Cloud Database (mimi_boutique)'))
     .catch(err => console.error('MongoDB Connection Error:', err.message));
+
+// ==========================================
+// GMAIL EMAIL TRANSPORTER (NODEMAILER)
+// ==========================================
+const mailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASS
+    }
+});
+
+async function sendOrderConfirmationEmail(order) {
+    if (!order.email || !process.env.GMAIL_USER || !process.env.GMAIL_APP_PASS) {
+        console.log('Skipping email: Missing customer email or GMAIL_USER / GMAIL_APP_PASS env vars.');
+        return;
+    }
+
+    const itemsHtml = (order.items || []).map(item => `
+        <tr>
+            <td style="padding: 10px 8px; border-bottom: 1px solid #eae6e1;">${item.title} (${item.size})</td>
+            <td style="padding: 10px 8px; border-bottom: 1px solid #eae6e1; text-align: center;">${item.quantity}</td>
+            <td style="padding: 10px 8px; border-bottom: 1px solid #eae6e1; text-align: right;">${item.price}</td>
+        </tr>
+    `).join('');
+
+    const mailOptions = {
+        from: `"MIMI BY MARYAM" <${process.env.GMAIL_USER}>`,
+        to: order.email,
+        bcc: process.env.GMAIL_USER, // Also sends a copy of every order to your boutique email
+        subject: `Order Confirmed #${order.orderId} | MIMI BY MARYAM`,
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eae6e1; padding: 28px; background-color: #ffffff; color: #1a1715;">
+                <h2 style="text-align: center; letter-spacing: 2px; margin-bottom: 4px;">MIMI BY MARYAM</h2>
+                <p style="text-align: center; color: #888888; font-size: 12px; margin-top: 0;">Timeless Luxury For Little Princesses</p>
+                <hr style="border: none; border-top: 1px solid #eae6e1; margin: 20px 0;">
+
+                <h3 style="margin-bottom: 8px;">Thank you for your order, ${order.customerName}!</h3>
+                <p style="font-size: 14px; color: #444444; line-height: 1.5;">
+                    We have received your order <strong>#${order.orderId}</strong> and our boutique team is preparing your outfit with care.
+                </p>
+
+                <table style="width: 100%; border-collapse: collapse; margin: 22px 0; font-size: 13px;">
+                    <thead>
+                        <tr style="background-color: #faf8f5;">
+                            <th style="padding: 10px 8px; text-align: left; border-bottom: 1px solid #eae6e1;">Outfit</th>
+                            <th style="padding: 10px 8px; text-align: center; border-bottom: 1px solid #eae6e1;">Qty</th>
+                            <th style="padding: 10px 8px; text-align: right; border-bottom: 1px solid #eae6e1;">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>${itemsHtml}</tbody>
+                </table>
+
+                <p style="font-size: 16px; font-weight: bold; text-align: right; margin-bottom: 20px;">
+                    Total Payable: ${order.totalAmount}
+                </p>
+
+                <div style="background-color: #faf8f5; padding: 14px; border: 1px solid #eae6e1; font-size: 13px; line-height: 1.6;">
+                    <strong>Delivery & Payment Details:</strong><br>
+                    • <strong>Payment Method:</strong> ${order.paymentMethod}<br>
+                    • <strong>Phone:</strong> ${order.phone}<br>
+                    • <strong>Shipping Address:</strong> ${order.address}
+                </div>
+
+                <p style="font-size: 12px; color: #777777; margin-top: 24px; text-align: center;">
+                    Need assistance or tracking updates? WhatsApp us anytime at <strong>+92 310 0064795</strong>.
+                </p>
+            </div>
+        `
+    };
+
+    try {
+        await mailTransporter.sendMail(mailOptions);
+        console.log(`Order confirmation email sent to ${order.email}`);
+    } catch (err) {
+        console.error('Failed to send order confirmation email:', err.message);
+    }
+}
 
 // ==========================================
 // DATABASE SCHEMAS (PRODUCTS & ORDERS)
@@ -43,6 +120,7 @@ const orderSchema = new mongoose.Schema({
     date: String,
     customerName: String,
     phone: String,
+    email: String,
     address: String,
     deliveryZone: String,
     paymentMethod: String,
@@ -104,6 +182,10 @@ app.post('/api/orders', async (req, res) => {
     try {
         const newOrder = new Order(req.body);
         await newOrder.save();
+
+        // Send automatic confirmation email to customer (and BCC to boutique Gmail)
+        await sendOrderConfirmationEmail(req.body);
+
         res.status(201).json({ success: true, order: newOrder });
     } catch (err) {
         res.status(500).json({ error: 'Failed to save order' });
