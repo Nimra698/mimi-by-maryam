@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="UTF-8">
-    <!-- 1. Mobile screen par website ko fit karne ke liye -->
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- 2. Official luxury brand fonts ke liye -->
     <link href="https://googleapis.com" rel="stylesheet">
-    
     <title>MIMI BY MARYAM</title>
     <link rel="stylesheet" href="Style.css">
 </head>
@@ -50,7 +46,7 @@
             <div class="hero-content">
                 <h1>Timeless Luxury For Little Princesses</h1>
                 <p>Explore exclusive, premium curated dresses beautifully crafted for ages 1 to 10 years.</p>
-                <p><h4>Custom made dresses for all age.</h4></p>
+                <p><strong>Custom made dresses for all age.</strong></p>
                 <a href="#collection" class="cta-button">Shop New Arrivals</a>
             </div>
         </section>
@@ -98,7 +94,6 @@
                         </div>
                     </a>
                 </div>
-
                 <!-- Product Card 4 -->
                 <div class="product-card">
                     <a href="Product.html?dress=plaid-shirt">
@@ -177,3 +172,59 @@
                 </div>
 
                 <div style="margin-bottom: 14px;">
+                    <label style="display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;">Design Notes / Reference Details *</label>
+                    <textarea id="custom-notes" rows="3" placeholder="Describe style, sleeves, embroidery, or paste a reference link..." required style="width: 100%; padding: 10px 12px; border: 1px solid #eae6e1; font-size: 13px;"></textarea>
+                </div>
+
+                <button type="submit" style="width: 100%; background-color: #1a1715; color: #ffffff; border: none; padding: 14px; font-size: 12px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;">Send Custom Order on WhatsApp</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="Script.js"></script>
+    <script>
+        function updateHomeBagBadge() {
+            const cart = JSON.parse(localStorage.getItem('mimi_cart')) || [];
+            const totalQty = cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0);
+            const bagBtn = document.querySelector('.cart-btn');
+            if (bagBtn) {
+                bagBtn.textContent = `BAG (${totalQty})`;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', updateHomeBagBadge);
+        window.addEventListener('pageshow', updateHomeBagBadge);
+
+        const customTrigger = document.getElementById('custom-order-trigger');
+        const customModal = document.getElementById('custom-outfit-modal');
+        const closeCustomModal = document.getElementById('close-custom-modal');
+        const customForm = document.getElementById('custom-outfit-form');
+
+        if (customTrigger && customModal) {
+            customTrigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                customModal.style.display = 'flex';
+            });
+        }
+        if (closeCustomModal && customModal) {
+            closeCustomModal.addEventListener('click', () => {
+                customModal.style.display = 'none';
+            });
+            customModal.addEventListener('click', (e) => {
+                if (e.target === customModal) customModal.style.display = 'none';
+            });
+        }
+        if (customForm) {
+            customForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('custom-cust-name')?.value || '';
+                const age = document.getElementById('custom-child-age')?.value || '';
+                const color = document.getElementById('custom-fabric-color')?.value || '';
+                const notes = document.getElementById('custom-notes')?.value || '';
+                const msg = encodeURIComponent(`Assalam-o-Alaikum Mimi by Maryam! I'd like to place a Custom Outfit Order:\n• Name: ${name}\n• Child Age: ${age}\n• Color/Fabric: ${color}\n• Details: ${notes}`);
+                window.open(`https://wa.me{msg}`, '_blank');
+                customModal.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
