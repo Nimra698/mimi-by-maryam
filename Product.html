@@ -2,13 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- 1. Mobile screen par website ko fit karne ke liye -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- 2. Official luxury brand fonts ke liye -->
     <link href="https://googleapis.com" rel="stylesheet">
-    
-    <title>MIMI BY MARYAM</title>
+    <title id="product-page-tab-title">MIMI BY MARYAM</title>
     <link rel="stylesheet" href="Style.css">
 </head>
 
@@ -22,7 +18,7 @@
     <main class="product-detail-container">
         <section class="product-media-gallery">
             <div class="main-display-window">
-                <img id="main-product-image" src="placeholder.jpg" alt="Loading Product Image" class="product-img-fluid"> 
+                <img id="main-product-image" src="blackmodel.jpeg" alt="Product Image" class="product-img-fluid"> 
             </div>
         </section>
 
@@ -135,6 +131,7 @@
         </div>
     </div>
 
+                           "Set Includes: Long tunic shirt and wide-leg crushed plazo pants.",
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const boutiqueInventory = {
@@ -211,9 +208,64 @@
                     ]
                 }
             };
-
             const urlParams = new URLSearchParams(window.location.search);
-            const dressId = urlParams.get('dress');
+            const dressId = urlParams.get('dress') || "black-silk";
+
+            let selectedSize = "9-10 yr";
+            let currentActivePrice = "";
+
+            const addToCartBtn = document.getElementById('add-to-cart-btn');
+            const priceEl = document.getElementById('product-page-price');
+
+            function getPriceForSize(item, sizeLabel) {
+                const isSmallAge = sizeLabel === "1-2 yr" || sizeLabel === "3-4 yr";
+                return isSmallAge ? item.priceSmall : item.priceLarge;
+            }
+
+            function refreshDisplayedPrice() {
+                const item = boutiqueInventory[dressId];
+                if (item) {
+                    currentActivePrice = getPriceForSize(item, selectedSize);
+                    if (priceEl) priceEl.textContent = currentActivePrice;
+                    if (addToCartBtn) {
+                        addToCartBtn.disabled = false;
+                        addToCartBtn.style.backgroundColor = "#1a1715";
+                        addToCartBtn.style.cursor = "pointer";
+                    }
+                }
+            }
+
+            function renderProduct(item) {
+                if (!item) return;
+                const titleEl = document.getElementById('product-page-title');
+                const imgEl = document.getElementById('main-product-image');
+                const tabTitleEl = document.getElementById('product-page-tab-title');
+                const detailsList = document.getElementById('dynamic-product-details-list');
+
+                if (titleEl) titleEl.textContent = item.title;
+                if (imgEl) {
+                    imgEl.src = item.mainImg;
+                    imgEl.alt = item.title;
+                }
+                if (tabTitleEl) tabTitleEl.textContent = item.title + " | Mimi by Maryam";
+                document.title = item.title + " | Mimi by Maryam";
+
+                refreshDisplayedPrice();
+
+                if (detailsList && item.details) {
+                    detailsList.innerHTML = "";
+                    item.details.forEach(text => {
+                        const li = document.createElement('li');
+                        li.style.marginBottom = "8px";
+                        li.textContent = text;
+                        detailsList.appendChild(li);
+                    });
+                }
+            }
+
+            if (boutiqueInventory[dressId]) {
+                renderProduct(boutiqueInventory[dressId]);
+            }
 
             let customProducts = [];
             try {
@@ -235,39 +287,8 @@
                 };
             });
 
-            let selectedSize = "9-10 yr";
-            let currentActivePrice = "";
-
-            function getPriceForSize(item, sizeLabel) {
-                const isSmallAge = sizeLabel === "1-2 yr" || sizeLabel === "3-4 yr";
-                return isSmallAge ? item.priceSmall : item.priceLarge;
-            }
-
-            function refreshDisplayedPrice() {
-                if (dressId && boutiqueInventory[dressId]) {
-                    const item = boutiqueInventory[dressId];
-                    currentActivePrice = getPriceForSize(item, selectedSize);
-                    document.getElementById('product-page-price').textContent = currentActivePrice;
-                }
-            }
-
-            if (dressId && boutiqueInventory[dressId]) {
-                const item = boutiqueInventory[dressId];
-                document.getElementById('product-page-title').textContent = item.title;
-                document.getElementById('main-product-image').src = item.mainImg;
-                document.getElementById('main-product-image').alt = item.title;
-                document.getElementById('product-page-tab-title').textContent = item.title + " | Mimi by Maryam";
-
-                refreshDisplayedPrice();
-
-                const detailsList = document.getElementById('dynamic-product-details-list');
-                detailsList.innerHTML = "";
-                item.details.forEach(text => {
-                    const li = document.createElement('li');
-                    li.style.marginBottom = "8px";
-                    li.textContent = text;
-                    detailsList.appendChild(li);
-                });
+            if (boutiqueInventory[dressId]) {
+                renderProduct(boutiqueInventory[dressId]);
             }
 
             const sizeTiles = document.querySelectorAll('.size-tile');
@@ -284,56 +305,61 @@
             const plusBtn = document.getElementById('qty-plus');
             const qtyInput = document.getElementById('qty-count');
 
-            plusBtn.addEventListener('click', () => {
-                let value = parseInt(qtyInput.value) || 1;
-                if (value < 10) qtyInput.value = value + 1;
-            });
+            if (plusBtn && qtyInput) {
+                plusBtn.addEventListener('click', () => {
+                    let value = parseInt(qtyInput.value) || 1;
+                    if (value < 10) qtyInput.value = value + 1;
+                });
+            }
 
-            minusBtn.addEventListener('click', () => {
-                let value = parseInt(qtyInput.value) || 1;
-                if (value > 1) qtyInput.value = value - 1;
-            });
+            if (minusBtn && qtyInput) {
+                minusBtn.addEventListener('click', () => {
+                    let value = parseInt(qtyInput.value) || 1;
+                    if (value > 1) qtyInput.value = value - 1;
+                });
+            }
 
             function updateBagBadge() {
                 const cart = JSON.parse(localStorage.getItem('mimi_cart')) || [];
-                const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const totalQty = cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0);
                 const bagBtn = document.querySelector('.cart-btn');
                 if (bagBtn) bagBtn.textContent = `Bag (${totalQty})`;
             }
             updateBagBadge();
 
-            const addToCartBtn = document.getElementById('add-to-cart-btn');
-            addToCartBtn.addEventListener('click', () => {
-                if (!dressId || !boutiqueInventory[dressId]) {
-                    alert("Please open a product from the home page first.");
-                    return;
-                }
+            if (addToCartBtn) {
+                addToCartBtn.addEventListener('click', () => {
+                    if (!dressId || !boutiqueInventory[dressId]) {
+                        alert("Please open a product from the home page first.");
+                        return;
+                    }
 
-                const currentProduct = boutiqueInventory[dressId];
-                const finalUnitPrice = getPriceForSize(currentProduct, selectedSize);
+                    const currentProduct = boutiqueInventory[dressId];
+                    const finalUnitPrice = getPriceForSize(currentProduct, selectedSize);
 
-                const cartItem = {
-                    id: dressId,
-                    title: currentProduct.title,
-                    price: finalUnitPrice,
-                    image: currentProduct.mainImg,
-                    size: selectedSize,
-                    quantity: parseInt(qtyInput.value) || 1
-                };
+                    const cartItem = {
+                        id: dressId,
+                        title: currentProduct.title,
+                        price: finalUnitPrice,
+                        image: currentProduct.mainImg,
+                        size: selectedSize,
+                        quantity: parseInt(qtyInput.value) || 1
+                    };
 
-                let cart = JSON.parse(localStorage.getItem('mimi_cart')) || [];
-                const existingIndex = cart.findIndex(item => item.id === cartItem.id && item.size === cartItem.size);
+                    let cart = JSON.parse(localStorage.getItem('mimi_cart')) || [];
+                    const existingIndex = cart.findIndex(item => item.id === cartItem.id && item.size === cartItem.size);
 
-                if (existingIndex > -1) {
-                    cart[existingIndex].quantity += cartItem.quantity;
-                } else {
-                    cart.push(cartItem);
-                }
+                    if (existingIndex > -1) {
+                        cart[existingIndex].quantity += cartItem.quantity;
+                    } else {
+                        cart.push(cartItem);
+                    }
 
-                localStorage.setItem('mimi_cart', JSON.stringify(cart));
-                updateBagBadge();
-                alert(`${cartItem.quantity}x ${cartItem.title} (${cartItem.size}) at ${finalUnitPrice} added to your bag!`);
-            });
+                    localStorage.setItem('mimi_cart', JSON.stringify(cart));
+                    updateBagBadge();
+                    alert(`${cartItem.quantity}x ${cartItem.title} (${cartItem.size}) at ${finalUnitPrice} added to your bag!`);
+                });
+            }
 
             const trigger = document.querySelector('.size-chart-trigger');
             const modal = document.getElementById('size-chart-modal');
@@ -345,9 +371,11 @@
                     modal.style.display = 'flex';
                 });
 
-                closeBtn.addEventListener('click', () => {
-                    modal.style.display = 'none';
-                });
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => {
+                        modal.style.display = 'none';
+                    });
+                }
 
                 modal.addEventListener('click', (e) => {
                     if (e.target === modal) {
@@ -356,28 +384,6 @@
                 });
             }
         });
-        // 1. When a size button is clicked:
-function selectSize(btn, sizeLabel, priceValue) {
-  // Remove active class from all size buttons
-  document.querySelectorAll('.size-tile').forEach(tile => {
-    tile.classList.remove('active-size');
-  });
-
-  // Highlight clicked size button
-  btn.classList.add('active-size');
-  selectedSize = sizeLabel;
-  selectedPrice = priceValue;
-
-  // Update displayed price
-  document.getElementById('product-price').innerText = `Rs. ${priceValue.toLocaleString()}`;
-
-  // Enable the Add to Cart button
-  const addBtn = document.getElementById('add-to-cart-btn');
-  addBtn.disabled = false;
-  addBtn.style.backgroundColor = '#1a1715';
-  addBtn.style.cursor = 'pointer';
-}
-
     </script>
 </body>
 </html>
