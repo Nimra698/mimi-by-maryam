@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1200">
     <title>Admin Dashboard | Mimi by Maryam</title>
     <link rel="stylesheet" href="Style.css">
     <style>
@@ -221,19 +221,17 @@
 </head>
 <body>
 
-    <!-- Admin Login Screen -->
     <div class="login-wrapper" id="login-screen">
         <div class="login-card">
             <h1>Mimi by Maryam</h1>
             <p>Boutique Admin Portal — Enter password to manage orders</p>
-            <form id="admin-login-form">
-                <input type="password" id="admin-password" class="admin-input" placeholder="Enter Admin Password" required>
+            <form id="admin-login-form" autocomplete="off">
+                <input type="password" id="admin-password" class="admin-input" placeholder="Enter Admin Password" autocomplete="new-password" required>
                 <button type="submit" class="admin-btn">Unlock Dashboard</button>
             </form>
         </div>
     </div>
 
-    <!-- Main Admin Dashboard -->
     <div class="dashboard-wrapper" id="dashboard-screen">
         <header class="admin-topbar">
             <div>
@@ -245,7 +243,6 @@
             </div>
         </header>
 
-        <!-- Summary Metrics -->
         <section class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">Total Orders</div>
@@ -265,7 +262,6 @@
             </div>
         </section>
 
-        <!-- Orders Table -->
         <section class="orders-panel">
             <div class="orders-toolbar">
                 <h2>Customer Orders</h2>
@@ -280,7 +276,6 @@
             <div id="orders-table-container"></div>
         </section>
 
-        <!-- Product Management Panel -->
         <section class="orders-panel" style="margin-top: 30px;">
             <div class="orders-toolbar">
                 <h2>Add New Suit to Boutique</h2>
@@ -292,12 +287,15 @@
                     <input type="text" id="new-prod-title" class="admin-input" placeholder="e.g. Royal Silk Edit – Peach Suit" required>
                 </div>
                 <div>
-                    <label style="display:block; font-size:11px; font-weight:bold; margin-bottom:5px; text-transform:uppercase;">Price (PKR) *</label>
-                    <input type="number" id="new-prod-price" class="admin-input" placeholder="e.g. 9500" required>
+                    <label style="display:block; font-size:11px; font-weight:bold; margin-bottom:5px; text-transform:uppercase;">Price for Ages 2–4Y (PKR) *</label>
+                    <input type="number" id="new-prod-price-small" class="admin-input" placeholder="e.g. 3500" required>
                 </div>
                 <div>
+                    <label style="display:block; font-size:11px; font-weight:bold; margin-bottom:5px; text-transform:uppercase;">Price for Ages 5–10Y (PKR) *</label>
+                    <input type="number" id="new-prod-price-large" class="admin-input" placeholder="e.g. 4000" required>
+                </div>                <div>
                     <label style="display:block; font-size:11px; font-weight:bold; margin-bottom:5px; text-transform:uppercase;">Available Sizes *</label>
-                    <input type="text" id="new-prod-sizes" class="admin-input" value="1-2Y, 3-4Y, 5-6Y, 7-8Y" required>
+                    <input type="text" id="new-prod-sizes" class="admin-input" value="1-2Y, 3-4Y, 5-6Y, 7-8Y, 9-10Y" required>
                 </div>
                 <div>
                     <label style="display:block; font-size:11px; font-weight:bold; margin-bottom:5px; text-transform:uppercase;">Category Tags (For Search) *</label>
@@ -496,8 +494,14 @@
             addProductForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const title = document.getElementById('new-prod-title').value.trim();
-                const rawPrice = parseFloat(document.getElementById('new-prod-price').value) || 0;
-                const formattedPrice = "Rs. " + rawPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const rawPriceSmall = parseFloat(document.getElementById('new-prod-price-small').value) || 0;
+                const rawPriceLarge = parseFloat(document.getElementById('new-prod-price-large').value) || 0;
+                const formattedPriceSmall = "Rs. " + rawPriceSmall.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const formattedPriceLarge = "Rs. " + rawPriceLarge.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const displayRange = rawPriceSmall === rawPriceLarge
+                    ? formattedPriceSmall
+                    : `Rs. ${rawPriceSmall.toLocaleString('en-US')} – Rs. ${rawPriceLarge.toLocaleString('en-US')}`;
+
                 const sizes = document.getElementById('new-prod-sizes').value.trim();
                 const category = document.getElementById('new-prod-category').value.trim();
                 const badge = document.getElementById('new-prod-badge').value.trim();
@@ -515,7 +519,9 @@
                     const newProduct = {
                         id: "custom-" + Date.now(),
                         title: title,
-                        price: formattedPrice,
+                        price: displayRange,
+                        priceSmall: formattedPriceSmall,
+                        priceLarge: formattedPriceLarge,
                         sizes: sizes,
                         category: category,
                         badge: badge,

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1200">
     <title id="product-page-tab-title">Mimi by Maryam | Premium Boutique Collection</title>
     <link rel="stylesheet" href="Style.css">
 </head>
@@ -134,7 +134,8 @@
             const boutiqueInventory = {
                 "black-silk": {
                     title: "Elegance Festive Edit – Black Silk Suit",
-                    price: "Rs. 3,500.00",
+                    priceSmall: "Rs. 3,500.00",
+                    priceLarge: "Rs. 4,000.00",
                     mainImg: "blackmodel.jpeg",
                     details: [
                         "Fabric: Premium Raw Silk shirt and trousers paired with an organza dupatta.",
@@ -145,7 +146,8 @@
                 },
                 "magenta-silk": {
                     title: "Elegance Floral Edit – Magenta Silk Shirt & Crushed Plazo Set",
-                    price: "Rs. 4,500.00",
+                    priceSmall: "Rs. 4,500.00",
+                    priceLarge: "Rs. 5,000.00",
                     mainImg: "pink.jpg",
                     details: [
                         "Fabric: High-grade pure Shamooz silk with crushed crepe plazo layers.",
@@ -156,7 +158,8 @@
                 },
                 "beige-silk": {
                     title: "Elegance Floral Edit – Beige Silk Co-Ord Set",
-                    price: "Rs. 3,450.00",
+                    priceSmall: "Rs. 3,450.00",
+                    priceLarge: "Rs. 3,950.00",
                     mainImg: "skinmodel.jpg",
                     details: [
                         "Fabric: Ultra-soft viscose silk blend perfect for lightweight seasonal wear.",
@@ -167,7 +170,8 @@
                 },
                 "plaid-shirt": {
                     title: "Elegance Plaid Edit – Shirt & White Trousers",
-                    price: "Rs. 4,500.00",
+                    priceSmall: "Rs. 4,500.00",
+                    priceLarge: "Rs. 5,000.00",
                     mainImg: "brownmodel.jpg",
                     details: [
                         "Fabric: Breathable premium organic cotton plaid knit shirt paired with linen-blend trousers.",
@@ -178,7 +182,8 @@
                 },
                 "mint": {
                     title: "Elegance Floral Edit – Mint Green Suit",
-                    price: "Rs. 3,000.00",
+                    priceSmall: "Rs. 3,000.00",
+                    priceLarge: "Rs. 3,500.00",
                     mainImg: "greenmodel.jpg",
                     details: [
                         "Fabric: Premium cotton-silk raw base tailored cleanly for kids comfort.",
@@ -189,7 +194,8 @@
                 },
                 "vibrant-multi": {
                     title: "Elegance Vibrant Edit – Multicolored 2 Piece Suit",
-                    price: "Rs. 3,500.00",
+                    priceSmall: "Rs. 3,500.00",
+                    priceLarge: "Rs. 4,000.00",
                     mainImg: "multimodel.jpg",
                     details: [
                         "Fabric: High-definition digitally printed premium Cambric cotton.",
@@ -203,10 +209,9 @@
             const urlParams = new URLSearchParams(window.location.search);
             const dressId = urlParams.get('dress');
 
-            // Fetch admin-added suits from server.js (/api/products)
             let customProducts = [];
             try {
-                const response = await fetch('http://localhost:3000/api/products');
+                const response = await fetch('/api/products');
                 if (response.ok) {
                     customProducts = await response.json();
                 }
@@ -217,19 +222,37 @@
             customProducts.forEach(prod => {
                 boutiqueInventory[prod.id] = {
                     title: prod.title,
-                    price: prod.price,
+                    priceSmall: prod.priceSmall || prod.price,
+                    priceLarge: prod.priceLarge || prod.price,
                     mainImg: prod.mainImg,
                     details: prod.details || []
                 };
             });
 
+            let selectedSize = "9-10 yr";
+            let currentActivePrice = "";
+
+            function getPriceForSize(item, sizeLabel) {
+                const isSmallAge = sizeLabel === "1-2 yr" || sizeLabel === "3-4 yr";
+                return isSmallAge ? item.priceSmall : item.priceLarge;
+            }
+
+            function refreshDisplayedPrice() {
+                if (dressId && boutiqueInventory[dressId]) {
+                    const item = boutiqueInventory[dressId];
+                    currentActivePrice = getPriceForSize(item, selectedSize);
+                    document.getElementById('product-page-price').textContent = currentActivePrice;
+                }
+            }
+
             if (dressId && boutiqueInventory[dressId]) {
                 const item = boutiqueInventory[dressId];
                 document.getElementById('product-page-title').textContent = item.title;
-                document.getElementById('product-page-price').textContent = item.price;
                 document.getElementById('main-product-image').src = item.mainImg;
                 document.getElementById('main-product-image').alt = item.title;
                 document.getElementById('product-page-tab-title').textContent = item.title + " | Mimi by Maryam";
+
+                refreshDisplayedPrice();
 
                 const detailsList = document.getElementById('dynamic-product-details-list');
                 detailsList.innerHTML = "";
@@ -241,19 +264,16 @@
                 });
             }
 
-            // Size Selection
             const sizeTiles = document.querySelectorAll('.size-tile');
-            let selectedSize = "9-10 yr";
-
             sizeTiles.forEach(tile => {
                 tile.addEventListener('click', () => {
                     sizeTiles.forEach(t => t.classList.remove('active-size'));
                     tile.classList.add('active-size');
                     selectedSize = tile.textContent.trim();
+                    refreshDisplayedPrice();
                 });
             });
 
-            // Quantity Stepper
             const minusBtn = document.getElementById('qty-minus');
             const plusBtn = document.getElementById('qty-plus');
             const qtyInput = document.getElementById('qty-count');
@@ -268,7 +288,6 @@
                 if (value > 1) qtyInput.value = value - 1;
             });
 
-            // Update Bag Counter Badge
             function updateBagBadge() {
                 const cart = JSON.parse(localStorage.getItem('mimi_cart')) || [];
                 const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -277,7 +296,6 @@
             }
             updateBagBadge();
 
-            // Add to Cart Button
             const addToCartBtn = document.getElementById('add-to-cart-btn');
             addToCartBtn.addEventListener('click', () => {
                 if (!dressId || !boutiqueInventory[dressId]) {
@@ -286,10 +304,12 @@
                 }
 
                 const currentProduct = boutiqueInventory[dressId];
+                const finalUnitPrice = getPriceForSize(currentProduct, selectedSize);
+
                 const cartItem = {
                     id: dressId,
                     title: currentProduct.title,
-                    price: currentProduct.price,
+                    price: finalUnitPrice,
                     image: currentProduct.mainImg,
                     size: selectedSize,
                     quantity: parseInt(qtyInput.value) || 1
@@ -306,10 +326,9 @@
 
                 localStorage.setItem('mimi_cart', JSON.stringify(cart));
                 updateBagBadge();
-                alert(`${cartItem.quantity}x ${cartItem.title} (${cartItem.size}) added to your bag!`);
+                alert(`${cartItem.quantity}x ${cartItem.title} (${cartItem.size}) at ${finalUnitPrice} added to your bag!`);
             });
 
-            // Size Chart Modal Open & Close
             const trigger = document.querySelector('.size-chart-trigger');
             const modal = document.getElementById('size-chart-modal');
             const closeBtn = document.getElementById('close-size-modal');

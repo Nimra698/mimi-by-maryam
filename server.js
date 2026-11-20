@@ -6,8 +6,8 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Replace YOUR_ACTUAL_PASSWORD_HERE with your MongoDB database user password (do not keep < > brackets)
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://lewane461_db_user:lewane698@cluster0.kmc61ml.mongodb.net/mimi_boutique?retryWrites=true&w=majority";
+// Reads your MongoDB link safely from Render Environment Variables (keeps your password private)
+const MONGO_URI = process.env.MONGO_URI;
 
 // Middleware
 app.use(cors());
@@ -28,6 +28,8 @@ const productSchema = new mongoose.Schema({
     id: String,
     title: String,
     price: String,
+    priceSmall: String,
+    priceLarge: String,
     sizes: String,
     category: String,
     badge: String,
