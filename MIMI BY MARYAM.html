@@ -220,8 +220,16 @@
                 const age = document.getElementById('custom-child-age')?.value || '';
                 const color = document.getElementById('custom-fabric-color')?.value || '';
                 const notes = document.getElementById('custom-notes')?.value || '';
-                const msg = encodeURIComponent(`Assalam-o-Alaikum Mimi by Maryam! I'd like to place a Custom Outfit Order:\n• Name: ${name}\n• Child Age: ${age}\n• Color/Fabric: ${color}\n• Details: ${notes}`);
-                window.open(`https://wa.me{msg}`, '_blank');
+                const msg = encodeURIComponent(
+                    "Assalam-o-Alaikum Mimi by Maryam! I'd like to place a Custom Outfit Order:\n" +
+                    "• Name: " + name + "\n" +
+                    "• Child Age: " + age + "\n" +
+                    "• Color/Fabric: " + color + "\n" +
+                    "• Details: " + notes
+                );
+                const whatsappNumber = "923100064795";
+                const whatsappUrl = "https://whatsapp.com" + whatsappNumber + "&text=" + msg;
+                window.open(whatsappUrl, '_blank');
                 customModal.style.display = 'none';
             });
         }
