@@ -42,9 +42,7 @@
             background-color: #fafafa;
             flex-shrink: 0;
         }
-        .cart-item-details {
-            flex: 1;
-        }
+        .cart-item-details { flex: 1; }
         .cart-item-title {
             font-size: 15px;
             font-weight: bold;
@@ -87,9 +85,7 @@
             text-decoration: underline;
             cursor: pointer;
         }
-        .remove-item-btn:hover {
-            color: #111111;
-        }
+        .remove-item-btn:hover { color: #111111; }
         .cart-item-subtotal {
             font-size: 15px;
             font-weight: bold;
@@ -134,9 +130,7 @@
             margin-top: 15px;
             margin-bottom: 25px;
         }
-        .checkout-form-group {
-            margin-bottom: 15px;
-        }
+        .checkout-form-group { margin-bottom: 15px; }
         .checkout-form-group label {
             display: block;
             font-size: 12px;
@@ -169,9 +163,7 @@
             cursor: pointer;
             text-transform: none;
         }
-        .payment-option-label:hover {
-            border-color: #222222;
-        }
+        .payment-option-label:hover { border-color: #222222; }
         .bank-details-box {
             display: none;
             background-color: #ffffff;
@@ -217,29 +209,117 @@
                 width: 100%;
                 padding: 20px 16px;
             }
-            .cart-header-title {
-                font-size: 19px;
-            }
-            .cart-item-row {
-                gap: 12px;
-                align-items: flex-start;
-            }
-            .cart-item-img {
-                width: 75px;
-                height: 98px;
-            }
-            .cart-item-title {
-                font-size: 13px;
-            }
-            .cart-item-meta {
-                font-size: 12px;
-            }
-            .cart-item-subtotal {
-                font-size: 13px;
-            }
+            .cart-header-title { font-size: 19px; }
+            .cart-item-row { gap: 12px; align-items: flex-start; }
+            .cart-item-img { width: 75px; height: 98px; }
+            .cart-item-title { font-size: 13px; }
+            .cart-item-meta { font-size: 12px; }
+            .cart-item-subtotal { font-size: 13px; }
         }
     </style>
 </head>
+<body>
+
+    <div class="announcement-bar">
+        EXTRA 2% OFF WITH PREPAID ORDERS | FREE SHIPPING OVER RS. 5,000
+    </div>
+
+    <div class="product-page-nav">
+        <a href="MIMI BY MARYAM.html" class="back-link">← Continue Shopping</a>
+    </div>
+
+    <main class="cart-container">
+        <section class="cart-items-section">
+            <h1 class="cart-header-title">Your Shopping Bag</h1>
+            <div id="cart-items-container"></div>
+        </section>
+
+        <aside class="order-summary-panel" id="summary-panel">
+            <h2 class="summary-title">Order Summary</h2>
+            
+            <div class="checkout-form-group">
+                <label>Delivery Region *</label>
+                <select id="shipping-zone" class="checkout-input">
+                    <option value="local">Same-City Delivery (PKR 115 – 149 per order)</option>
+                    <option value="intercity" selected>Inter-City / Cross-Province (PKR 199 – 249 per order)</option>
+                </select>
+            </div>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">Rs. 0.00</span>
+            </div>
+            <div class="summary-row">
+                <span>Shipping Charges</span>
+                <span id="cart-shipping">Free</span>
+            </div>
+            <p class="shipping-note" id="shipping-info-note">
+                Free shipping automatically applied on orders over Rs. 5,000!
+            </p>
+
+            <div class="summary-row" id="discount-row" style="display: none; color: #b85d79; font-weight: bold;">
+                <span>Prepaid Discount (2%)</span>
+                <span id="cart-discount">- Rs. 0.00</span>
+            </div>
+
+            <div class="summary-total">
+                <span>Total</span>
+                <span id="cart-total">Rs. 0.00</span>
+            </div>
+
+            <form id="checkout-form">
+                <div class="checkout-form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="cust-name" class="checkout-input" placeholder="Enter your full name" required>
+                </div>
+                <div class="checkout-form-group">
+                    <label>Phone Number (WhatsApp) *</label>
+                    <input type="tel" id="cust-phone" class="checkout-input" placeholder="03XX-XXXXXXX" required>
+                </div>
+                <div class="checkout-form-group">
+                    <label>Email Address (For Order Receipt) *</label>
+                    <input type="email" id="cust-email" class="checkout-input" placeholder="you@example.com" required>
+                </div>
+                <div class="checkout-form-group">
+                    <label>City & Delivery Address *</label>
+                    <input type="text" id="cust-address" class="checkout-input" placeholder="House #, Street, City" required>
+                </div>
+
+                <div class="checkout-form-group">
+                    <label>Payment Method *</label>
+                    <div class="payment-options-group">
+                        <label class="payment-option-label">
+                            <input type="radio" name="payment-method" value="COD" checked>
+                            <span>Cash on Delivery (COD)</span>
+                        </label>
+                        <label class="payment-option-label">
+                            <input type="radio" name="payment-method" value="Bank Transfer">
+                            <span>Bank Transfer / Raast (Extra 2% Off)</span>
+                        </label>
+                    </div>
+
+                    <div class="bank-details-box" id="bank-details-box">
+                        <strong>Send Payment To:</strong><br>
+                        Bank Name: Meezan Bank / JazzCash / Raast<br>
+                        Account Title: Mimi by Maryam<br>
+                        Account / IBAN: PK00MEZN0000000000000000<br><br>
+
+                        <div class="checkout-form-group" style="margin-bottom: 10px;">
+                            <label>Your Account Title / Sender Name *</label>
+                            <input type="text" id="sender-name" class="checkout-input" placeholder="Name on your bank / JazzCash / EasyPaisa">
+                        </div>
+                        <div class="checkout-form-group" style="margin-bottom: 6px;">
+                            <label>Transaction ID (TID) / Reference # *</label>
+                            <input type="text" id="transaction-id" class="checkout-input" placeholder="Enter TID from your payment receipt">
+                        </div>
+                        <em>You can also share the receipt screenshot on WhatsApp (+92 310 0064795).</em>
+                    </div>
+                </div>
+
+                <button type="submit" class="checkout-btn" id="place-order-btn">PLACE ORDER</button>
+            </form>
+        </aside>
+    </main>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const API_BASE = "/api";
@@ -418,7 +498,6 @@
                     localStorage.setItem('mimi_orders', JSON.stringify(existingOrders));
                 }
 
-                // Save order for the Thank You page, clear bag, and redirect
                 localStorage.setItem('mimi_last_order', JSON.stringify(newOrder));
                 localStorage.removeItem('mimi_cart');
                 window.location.href = "order-confirmation.html";
