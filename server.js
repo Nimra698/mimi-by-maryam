@@ -24,7 +24,9 @@ mongoose.connect(MONGO_URI)
 // GMAIL EMAIL TRANSPORTER (NODEMAILER)
 // ==========================================
 const mailTransporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: '://gmail.com',
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_APP_PASS
@@ -48,7 +50,7 @@ async function sendOrderConfirmationEmail(order) {
     const mailOptions = {
         from: `"MIMI BY MARYAM" <${process.env.GMAIL_USER}>`,
         to: order.email,
-        bcc: process.env.GMAIL_USER, // Also sends a copy of every order to your boutique email
+        bcc: process.env.GMAIL_USER,
         subject: `Order Confirmed #${order.orderId} | MIMI BY MARYAM`,
         html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eae6e1; padding: 28px; background-color: #ffffff; color: #1a1715;">
@@ -97,7 +99,6 @@ async function sendOrderConfirmationEmail(order) {
         console.error('Failed to send order confirmation email:', err.message);
     }
 }
-
 // ==========================================
 // DATABASE SCHEMAS (PRODUCTS & ORDERS)
 // ==========================================
@@ -180,14 +181,16 @@ app.get('/api/orders', async (req, res) => {
 
 app.post('/api/orders', async (req, res) => {
     try {
+        // 1. Send confirmation email right away so it doesn't wait on DB
+        await sendOrderConfirmationEmail(req.body);
+
+        // 2. Save order to MongoDB
         const newOrder = new Order(req.body);
         await newOrder.save();
 
-        // Send automatic confirmation email to customer (and BCC to boutique Gmail)
-        await sendOrderConfirmationEmail(req.body);
-
         res.status(201).json({ success: true, order: newOrder });
     } catch (err) {
+        console.error('Order API Error:', err.message);
         res.status(500).json({ error: 'Failed to save order' });
     }
 });
