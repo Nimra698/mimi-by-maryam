@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-    <!-- 1. Mobile screen par website ko fit karne ke liye -->
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- 2. Official luxury brand fonts ke liye -->
     <link href="https://googleapis.com" rel="stylesheet">
-    
-    <title>MIMI BY MARYAM</title>
+    <title>Admin Portal | MIMI BY MARYAM</title>
     <link rel="stylesheet" href="Style.css">
     <style>
         body {
@@ -198,13 +194,16 @@
             display: block;
             width: 100%;
         }
-        .whatsapp-link {
+        .email-link {
             display: inline-block;
             margin-top: 5px;
-            color: #128c7e;
+            color: #1a1715;
             font-weight: bold;
             font-size: 12px;
             text-decoration: underline;
+        }
+        .email-link:hover {
+            color: #b85d79;
         }
         .delete-order-btn {
             background: none;
@@ -221,6 +220,43 @@
             padding: 50px 20px;
             color: #777777;
             font-size: 14px;
+        }
+        .prod-item-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 14px;
+            border: 1px solid #eae6e1;
+            margin-bottom: 12px;
+            background: #faf8f5;
+            flex-wrap: wrap;
+        }
+        .sold-out-tag {
+            display: inline-block;
+            background-color: #cc0000;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-left: 8px;
+        }
+        .toggle-stock-btn {
+            padding: 7px 14px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid #1a1715;
+            background: #ffffff;
+            color: #1a1715;
+            cursor: pointer;
+        }
+        .toggle-stock-btn:hover {
+            background: #1a1715;
+            color: #ffffff;
         }
     </style>
 </head>
@@ -298,7 +334,8 @@
                 <div>
                     <label style="display:block; font-size:11px; font-weight:bold; margin-bottom:5px; text-transform:uppercase;">Price for Ages 5–10Y (PKR) *</label>
                     <input type="number" id="new-prod-price-large" class="admin-input" placeholder="e.g. 4000" required>
-                </div>                <div>
+                </div>
+                <div>
                     <label style="display:block; font-size:11px; font-weight:bold; margin-bottom:5px; text-transform:uppercase;">Available Sizes *</label>
                     <input type="text" id="new-prod-sizes" class="admin-input" value="1-2Y, 3-4Y, 5-6Y, 7-8Y, 9-10Y" required>
                 </div>
@@ -308,7 +345,7 @@
                 </div>
                 <div>
                     <label style="display:block; font-size:11px; font-weight:bold; margin-bottom:5px; text-transform:uppercase;">Badge Label (Optional)</label>
-                    <input type="text" id="new-prod-badge" class="admin-input" placeholder="e.g. NEW">
+                    <input type="text" id="new-prod-badge" class="admin-input" placeholder="e.g. NEW or SOLD OUT">
                 </div>
                 <div>
                     <label style="display:block; font-size:11px; font-weight:bold; margin-bottom:5px; text-transform:uppercase;">Upload Suit Photo *</label>
@@ -316,7 +353,9 @@
                 </div>
                 <div style="grid-column: 1 / -1;">
                     <label style="display:block; font-size:11px; font-weight:bold; margin-bottom:5px; text-transform:uppercase;">Fabric & Care Details (One detail per line) *</label>
-                    <textarea id="new-prod-details" class="admin-input" rows="3" placeholder="Fabric: Pure Raw Silk&#10;Set Includes: Shirt, Dupatta, Trouser&#10;Care: Dry clean recommended" required></textarea>
+                    <textarea id="new-prod-details" class="admin-input" rows="3" placeholder="Fabric: Pure Raw Silk
+Set Includes: Shirt, Dupatta, Trouser
+Care: Dry clean recommended" required></textarea>
                 </div>
                 <div style="grid-column: 1 / -1;">
                     <button type="submit" class="admin-btn" style="max-width: 260px;">+ Publish Suit to Store</button>
@@ -327,7 +366,6 @@
             <div id="custom-products-list"></div>
         </section>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const ADMIN_PASS = "maryam123";
@@ -422,13 +460,22 @@
                         ? `<strong>Bank Transfer (2% Off)</strong><br>Sender: ${order.senderName}<br>TID: <code>${order.transactionId}</code>`
                         : `<strong>Cash on Delivery (COD)</strong>`;
 
-                    const cleanPhone = order.phone.replace(/[^0-9]/g, '').replace(/^0/, '92');
-                    const waMessage = encodeURIComponent(`Assalam-o-Alaikum ${order.customerName}! Your order #${order.orderId} (${order.totalAmount}) from Mimi by Maryam has been received.`);
+                    const emailSubject = encodeURIComponent(`Order Confirmed #${order.orderId} | MIMI BY MARYAM`);
+                    const emailBody = encodeURIComponent(`Assalam-o-Alaikum ${order.customerName},\n\nYour order #${order.orderId} (${order.totalAmount}) from MIMI BY MARYAM has been confirmed and is being prepared with care.\n\nThank you for shopping with us!`);
+                    const emailActionHtml = order.email
+                        ? `<a href="mailto:${order.email}?subject=${emailSubject}&body=${emailBody}" class="email-link">Confirm on Email</a>`
+                        : `<span style="color:#888; font-size:12px;">No email provided</span>`;
 
                     tableHTML += `
                         <tr>
                             <td><strong>#${order.orderId}</strong><br><span style="color:#777; font-size:12px;">${order.date}</span></td>
-                            <td><strong>${order.customerName}</strong><br>${order.phone}<br><span style="color:#555;">${order.address}</span><br><a href="https://wa.me{cleanPhone}?text=${waMessage}" target="_blank" class="whatsapp-link">Confirm on WhatsApp</a></td>
+                            <td>
+                                <strong>${order.customerName}</strong><br>
+                                ${order.phone}<br>
+                                ${order.email ? `<span style="color:#555;">${order.email}</span><br>` : ''}
+                                <span style="color:#555;">${order.address}</span><br>
+                                ${emailActionHtml}
+                            </td>
                             <td>${itemsList}</td>
                             <td>${paymentDetails}</td>
                             <td><strong>${order.totalAmount}</strong></td>
@@ -453,71 +500,86 @@
             statusFilter.addEventListener('change', renderOrders);
 
             window.changeOrderStatus = async function(orderId, newStatus) {
-                await fetch(`${API_BASE}/orders/${orderId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ status: newStatus })
-                });
+                try {
+                    await fetch(`${API_BASE}/orders/${orderId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: newStatus })
+                    });
+                } catch (err) {
+                    console.error(err);
+                }
                 renderOrders();
             };
 
             window.deleteOrder = async function(orderId) {
-                if (confirm("Are you sure you want to delete this order record?")) {
-                    await fetch(`${API_BASE}/orders/${orderId}`, { method: 'DELETE' });
+                if (confirm("Are you sure you want to delete this order?")) {
+                    try {
+                        await fetch(`${API_BASE}/orders/${orderId}`, { method: 'DELETE' });
+                    } catch (err) {
+                        console.error(err);
+                    }
                     renderOrders();
                 }
             };
 
             async function renderCustomProducts() {
-                let customProducts = [];
+                let products = [];
                 try {
                     const response = await fetch(`${API_BASE}/products`);
-                    if (response.ok) customProducts = await response.json();
+                    if (response.ok) products = await response.json();
                 } catch (err) {
-                    customProducts = JSON.parse(localStorage.getItem('mimi_custom_products')) || [];
+                    products = [];
                 }
 
-                if (customProducts.length === 0) {
+                if (products.length === 0) {
                     customProductsList.innerHTML = `<p style="color:#777; font-size:13px;">No custom suits added yet. Use the form above to publish new products.</p>`;
                     return;
                 }
 
-                customProductsList.innerHTML = customProducts.map((prod) => `
-                    <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid #eae6e1; gap:15px;">
-                        <div style="display:flex; align-items:center; gap:15px;">
-                            <img src="${prod.mainImg}" alt="${prod.title}" style="width:60px; height:75px; object-fit:cover; border:1px solid #eae6e1;">
-                            <div>
-                                <strong>${prod.title}</strong><br>
-                                <span style="font-size:12px; color:#555;">${prod.price} &nbsp;|&nbsp; Sizes: ${prod.sizes}</span>
+                customProductsList.innerHTML = products.map(prod => {
+                    const isSoldOut = (prod.badge || '').toUpperCase() === 'SOLD OUT' || (prod.badge || '').toUpperCase() === 'OUT OF STOCK';
+                    return `
+                        <div class="prod-item-card">
+                            <div style="display:flex; align-items:center; gap:14px;">
+                                <img src="${prod.mainImg}" alt="${prod.title}" style="width:55px; height:70px; object-fit:cover; border:1px solid #eae6e1;">
+                                <div>
+                                    <strong>${prod.title}</strong>
+                                    ${isSoldOut ? `<span class="sold-out-tag">SOLD OUT</span>` : (prod.badge ? `<span style="font-size:11px; background:#f7cbd7; padding:2px 6px; margin-left:6px; font-weight:bold;">${prod.badge}</span>` : '')}
+                                    <div style="font-size:12px; color:#555; margin-top:4px;">${prod.price} &nbsp;|&nbsp; Sizes: ${prod.sizes}</div>
+                                </div>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <button type="button" class="toggle-stock-btn" onclick="toggleSoldOut('${prod.id}', ${isSoldOut})">
+                                    ${isSoldOut ? 'Mark In Stock' : 'Mark Sold Out'}
+                                </button>
+                                <button type="button" class="delete-order-btn" style="margin-top:0;" onclick="deleteCustomProduct('${prod.id}')">Remove</button>
                             </div>
                         </div>
-                        <button type="button" class="delete-order-btn" onclick="deleteCustomProduct('${prod.id}')">Remove Suit</button>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }
 
             addProductForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const title = document.getElementById('new-prod-title').value.trim();
-                const rawPriceSmall = parseFloat(document.getElementById('new-prod-price-small').value) || 0;
-                const rawPriceLarge = parseFloat(document.getElementById('new-prod-price-large').value) || 0;
-                const formattedPriceSmall = "Rs. " + rawPriceSmall.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                const formattedPriceLarge = "Rs. " + rawPriceLarge.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                const displayRange = rawPriceSmall === rawPriceLarge
-                    ? formattedPriceSmall
-                    : `Rs. ${rawPriceSmall.toLocaleString('en-US')} – Rs. ${rawPriceLarge.toLocaleString('en-US')}`;
-
+                const rawSmall = parseFloat(document.getElementById('new-prod-price-small').value);
+                const rawLarge = parseFloat(document.getElementById('new-prod-price-large').value);
                 const sizes = document.getElementById('new-prod-sizes').value.trim();
                 const category = document.getElementById('new-prod-category').value.trim();
                 const badge = document.getElementById('new-prod-badge').value.trim();
                 const detailsText = document.getElementById('new-prod-details').value.trim();
-                const detailsArray = detailsText.split('\n').map(line => line.trim()).filter(line => line !== "");
                 const imageFile = document.getElementById('new-prod-image').files[0];
 
                 if (!imageFile) {
                     alert("Please select an image file.");
                     return;
                 }
+
+                const formattedPriceSmall = "Rs. " + rawSmall.toLocaleString('en-US');
+                const formattedPriceLarge = "Rs. " + rawLarge.toLocaleString('en-US');
+                const displayRange = rawSmall === rawLarge ? formattedPriceSmall : `${formattedPriceSmall} – ${formattedPriceLarge}`;
+                const detailsArray = detailsText.split('\n').map(line => line.trim()).filter(Boolean);
 
                 const reader = new FileReader();
                 reader.onload = async function(event) {
@@ -550,6 +612,20 @@
                 };
                 reader.readAsDataURL(imageFile);
             });
+
+            window.toggleSoldOut = async function(prodId, currentlySoldOut) {
+                const newBadge = currentlySoldOut ? "" : "SOLD OUT";
+                try {
+                    await fetch(`${API_BASE}/products/${prodId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ badge: newBadge })
+                    });
+                } catch (err) {
+                    console.error(err);
+                }
+                renderCustomProducts();
+            };
 
             window.deleteCustomProduct = async function(prodId) {
                 if (confirm("Remove this suit from your storefront?")) {
