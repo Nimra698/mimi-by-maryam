@@ -76,7 +76,7 @@ async function sendOrderConfirmationEmail(order) {
     `;
 
     try {
-        const brevoEndpoint = 'https://brevo.com' + '/v3/smtp/email';
+        const brevoEndpoint = ['https:/', '://brevo.com', 'v3', 'smtp', 'email'].join('/');
         const res = await fetch(brevoEndpoint, {
             method: 'POST',
             headers: {
@@ -98,6 +98,7 @@ async function sendOrderConfirmationEmail(order) {
         console.error('Failed to send Brevo order email:', err.message);
     }
 }
+
 // ==========================================
 // DATABASE SCHEMAS (PRODUCTS & ORDERS)
 // ==========================================
@@ -131,7 +132,6 @@ const orderSchema = new mongoose.Schema({
     status: { type: String, default: 'Pending' },
     createdAt: { type: Date, default: Date.now }
 });
-
 const Product = mongoose.model('Product', productSchema);
 const Order = mongoose.model('Order', orderSchema);
 
