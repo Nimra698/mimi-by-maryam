@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,21 +20,11 @@ mongoose.connect(MONGO_URI)
     .catch(err => console.error('MongoDB Connection Error:', err.message));
 
 // ==========================================
-// GMAIL EMAIL TRANSPORTER (NODEMAILER)
+// BREVO HTTPS EMAIL SENDER (WORKS ON RENDER)
 // ==========================================
-const mailTransporter = nodemailer.createTransport({
-    host: '://gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASS
-    }
-});
-
 async function sendOrderConfirmationEmail(order) {
-    if (!order.email || !process.env.GMAIL_USER || !process.env.GMAIL_APP_PASS) {
-        console.log('Skipping email: Missing customer email or GMAIL_USER / GMAIL_APP_PASS env vars.');
+    if (!order.email || !process.env.BREVO_API_KEY || !process.env.GMAIL_USER) {
+        console.log('Skipping email: Missing customer email, BREVO_API_KEY, or GMAIL_USER env vars.');
         return;
     }
 
@@ -47,56 +36,65 @@ async function sendOrderConfirmationEmail(order) {
         </tr>
     `).join('');
 
-    const mailOptions = {
-        from: `"MIMI BY MARYAM" <${process.env.GMAIL_USER}>`,
-        to: order.email,
-        bcc: process.env.GMAIL_USER,
-        subject: `Order Confirmed #${order.orderId} | MIMI BY MARYAM`,
-        html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eae6e1; padding: 28px; background-color: #ffffff; color: #1a1715;">
-                <h2 style="text-align: center; letter-spacing: 2px; margin-bottom: 4px;">MIMI BY MARYAM</h2>
-                <p style="text-align: center; color: #888888; font-size: 12px; margin-top: 0;">Timeless Luxury For Little Princesses</p>
-                <hr style="border: none; border-top: 1px solid #eae6e1; margin: 20px 0;">
+    const htmlBody = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eae6e1; padding: 28px; background-color: #ffffff; color: #1a1715;">
+            <h2 style="text-align: center; letter-spacing: 2px; margin-bottom: 4px;">MIMI BY MARYAM</h2>
+            <p style="text-align: center; color: #888888; font-size: 12px; margin-top: 0;">Timeless Luxury For Little Princesses</p>
+            <hr style="border: none; border-top: 1px solid #eae6e1; margin: 20px 0;">
 
-                <h3 style="margin-bottom: 8px;">Thank you for your order, ${order.customerName}!</h3>
-                <p style="font-size: 14px; color: #444444; line-height: 1.5;">
-                    We have received your order <strong>#${order.orderId}</strong> and our boutique team is preparing your outfit with care.
-                </p>
+            <h3 style="margin-bottom: 8px;">Thank you for your order, ${order.customerName}!</h3>
+            <p style="font-size: 14px; color: #444444; line-height: 1.5;">
+                We have received your order <strong>#${order.orderId}</strong> and our boutique team is preparing your outfit with care.
+            </p>
 
-                <table style="width: 100%; border-collapse: collapse; margin: 22px 0; font-size: 13px;">
-                    <thead>
-                        <tr style="background-color: #faf8f5;">
-                            <th style="padding: 10px 8px; text-align: left; border-bottom: 1px solid #eae6e1;">Outfit</th>
-                            <th style="padding: 10px 8px; text-align: center; border-bottom: 1px solid #eae6e1;">Qty</th>
-                            <th style="padding: 10px 8px; text-align: right; border-bottom: 1px solid #eae6e1;">Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>${itemsHtml}</tbody>
-                </table>
+            <table style="width: 100%; border-collapse: collapse; margin: 22px 0; font-size: 13px;">
+                <thead>
+                    <tr style="background-color: #faf8f5;">
+                        <th style="padding: 10px 8px; text-align: left; border-bottom: 1px solid #eae6e1;">Outfit</th>
+                        <th style="padding: 10px 8px; text-align: center; border-bottom: 1px solid #eae6e1;">Qty</th>
+                        <th style="padding: 10px 8px; text-align: right; border-bottom: 1px solid #eae6e1;">Price</th>
+                    </tr>
+                </thead>
+                <tbody>${itemsHtml}</tbody>
+            </table>
 
-                <p style="font-size: 16px; font-weight: bold; text-align: right; margin-bottom: 20px;">
-                    Total Payable: ${order.totalAmount}
-                </p>
+            <p style="font-size: 16px; font-weight: bold; text-align: right; margin-bottom: 20px;">
+                Total Payable: ${order.totalAmount}
+            </p>
 
-                <div style="background-color: #faf8f5; padding: 14px; border: 1px solid #eae6e1; font-size: 13px; line-height: 1.6;">
-                    <strong>Delivery & Payment Details:</strong><br>
-                    • <strong>Payment Method:</strong> ${order.paymentMethod}<br>
-                    • <strong>Phone:</strong> ${order.phone}<br>
-                    • <strong>Shipping Address:</strong> ${order.address}
-                </div>
-
-                <p style="font-size: 12px; color: #777777; margin-top: 24px; text-align: center;">
-                    Need assistance or tracking updates? WhatsApp us anytime at <strong>+92 310 0064795</strong>.
-                </p>
+            <div style="background-color: #faf8f5; padding: 14px; border: 1px solid #eae6e1; font-size: 13px; line-height: 1.6;">
+                <strong>Delivery & Payment Details:</strong><br>
+                • <strong>Payment Method:</strong> ${order.paymentMethod}<br>
+                • <strong>Phone:</strong> ${order.phone}<br>
+                • <strong>Shipping Address:</strong> ${order.address}
             </div>
-        `
-    };
+
+            <p style="font-size: 12px; color: #777777; margin-top: 24px; text-align: center;">
+                Need assistance or tracking updates? WhatsApp us anytime at <strong>+92 310 0064795</strong>.
+            </p>
+        </div>
+    `;
 
     try {
-        await mailTransporter.sendMail(mailOptions);
-        console.log(`Order confirmation email sent to ${order.email}`);
+        const res = await fetch('https://brevo.com', {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'api-key': process.env.BREVO_API_KEY,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                sender: { name: 'MIMI BY MARYAM', email: process.env.GMAIL_USER },
+                to: [{ email: order.email, name: order.customerName }],
+                bcc: [{ email: process.env.GMAIL_USER }],
+                subject: `Order Confirmed #${order.orderId} | MIMI BY MARYAM`,
+                htmlContent: htmlBody
+            })
+        });
+        const data = await res.json();
+        console.log('Brevo Email Response:', res.status, data);
     } catch (err) {
-        console.error('Failed to send order confirmation email:', err.message);
+        console.error('Failed to send Brevo order email:', err.message);
     }
 }
 // ==========================================
@@ -181,7 +179,7 @@ app.get('/api/orders', async (req, res) => {
 
 app.post('/api/orders', async (req, res) => {
     try {
-        // 1. Send confirmation email right away so it doesn't wait on DB
+        // 1. Send automatic confirmation email via Brevo HTTPS API
         await sendOrderConfirmationEmail(req.body);
 
         // 2. Save order to MongoDB
