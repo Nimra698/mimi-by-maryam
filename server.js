@@ -76,7 +76,9 @@ async function sendOrderConfirmationEmail(order) {
     `;
 
     try {
-        const brevoEndpoint = ['https:/', '://brevo.com', 'v3', 'smtp', 'email'].join('/');
+       const host = "api." + "brevo." + "com";
+       const brevoEndpoint = "https://" + host + "/v3/smtp/email";
+
         const res = await fetch(brevoEndpoint, {
             method: 'POST',
             headers: {
