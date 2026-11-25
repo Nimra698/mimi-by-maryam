@@ -76,8 +76,8 @@ async function sendOrderConfirmationEmail(order) {
     `;
 
     try {
-       const host = "api." + "brevo." + "com";
-       const brevoEndpoint = "https://" + host + "/v3/smtp/email";
+        const host = "api." + "brevo." + "com";
+        const brevoEndpoint = "https://" + host + "/v3/smtp/email";
 
         const res = await fetch(brevoEndpoint, {
             method: 'POST',
@@ -113,11 +113,11 @@ const productSchema = new mongoose.Schema({
     sizes: String,
     category: String,
     badge: String,
+    salePercent: { type: Number, default: 0 },
     mainImg: String,
     details: [String],
     createdAt: { type: Date, default: Date.now }
 });
-
 const orderSchema = new mongoose.Schema({
     orderId: String,
     date: String,
@@ -134,6 +134,7 @@ const orderSchema = new mongoose.Schema({
     status: { type: String, default: 'Pending' },
     createdAt: { type: Date, default: Date.now }
 });
+
 const Product = mongoose.model('Product', productSchema);
 const Order = mongoose.model('Order', orderSchema);
 
@@ -156,6 +157,23 @@ app.post('/api/products', async (req, res) => {
         res.status(201).json({ success: true, product: newProduct });
     } catch (err) {
         res.status(500).json({ error: 'Failed to save product' });
+    }
+});
+
+app.put('/api/products/:id', async (req, res) => {
+    try {
+        const updateFields = { id: req.params.id };
+        if (req.body.badge !== undefined) updateFields.badge = req.body.badge;
+        if (req.body.salePercent !== undefined) updateFields.salePercent = Number(req.body.salePercent) || 0;
+
+        const updatedProduct = await Product.findOneAndUpdate(
+            { id: req.params.id },
+            { $set: updateFields },
+            { new: true, upsert: true }
+        );
+        res.json({ success: true, product: updatedProduct });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to update product' });
     }
 });
 
@@ -211,7 +229,13 @@ app.put('/api/orders/:orderId', async (req, res) => {
 
 app.delete('/api/orders/:orderId', async (req, res) => {
     try {
-        await Order.deleteOne({ orderId: req.params.orderId });
+        const cleanId = req.params.orderId.replace(/^#/, '').trim();
+        await Order.deleteMany({
+            $or: [
+                { orderId: cleanId },
+                { orderId: '#' + cleanId }
+            ]
+        });
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: 'Failed to delete order' });

@@ -58,16 +58,77 @@
             </div>
 
             <div class="shipping-info-accordion">
-                <h3>Delivery & Shipping Information</h3>
+                <h3>Delivery &amp; Shipping Information</h3>
                 <ul>
                     <li><strong>Same-City Local Delivery:</strong> PKR 115–149 (up to 0.5 kg).</li>
-                    <li><strong>Inter-City & Cross-Province:</strong> PKR 199–249 (up to 0.5 kg).</li>
+                    <li><strong>Inter-City &amp; Cross-Province:</strong> PKR 199–249 (up to 0.5 kg).</li>
                     <li><strong>Free Shipping:</strong> Automatically applied on all orders over Rs. 5,000.</li>
                     <li>Each designer outfit is steamed, handled with care, and securely packaged to arrive in perfect condition.</li>
                 </ul>
             </div>
         </section>
     </main>
+    <!-- Kids Size Chart Popup Modal -->
+    <div id="size-chart-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.55); z-index: 2000; justify-content: center; align-items: center; padding: 20px;">
+        <div style="background-color: #ffffff; max-width: 580px; width: 100%; padding: 35px 30px; border: 1px solid #eae6e1; position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);">
+            <button type="button" id="close-size-modal" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 22px; cursor: pointer; color: #222222;">✕</button>
+            <h2 style="font-size: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; color: #111111;">Kids Boutique Size Guide</h2>
+            <p style="font-size: 12px; color: #777777; margin-bottom: 20px;">All garment measurements are listed in inches.</p>
+
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: center;">
+                <thead>
+                    <tr style="background-color: #faf8f5;">
+                        <th style="padding: 12px 8px; border: 1px solid #eae6e1; font-size: 11px; text-transform: uppercase;">Age / Size</th>
+                        <th style="padding: 12px 8px; border: 1px solid #eae6e1; font-size: 11px; text-transform: uppercase;">Shirt Length</th>
+                        <th style="padding: 12px 8px; border: 1px solid #eae6e1; font-size: 11px; text-transform: uppercase;">Chest</th>
+                        <th style="padding: 12px 8px; border: 1px solid #eae6e1; font-size: 11px; text-transform: uppercase;">Sleeve</th>
+                        <th style="padding: 12px 8px; border: 1px solid #eae6e1; font-size: 11px; text-transform: uppercase;">Trouser Length</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;"><strong>1-2 yr</strong></td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">18"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">22"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">11"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">19"</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;"><strong>3-4 yr</strong></td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">21"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">24"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">13"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">22"</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;"><strong>5-6 yr</strong></td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">24"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">26"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">15"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">25"</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;"><strong>7-8 yr</strong></td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">27"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">28"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">17"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">28"</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;"><strong>9-10 yr</strong></td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">30"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">30"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">19"</td>
+                        <td style="padding: 10px 8px; border: 1px solid #eae6e1;">31"</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="font-size: 11px; color: #777777; margin-top: 15px; line-height: 1.5;">
+                * Note: Custom sizing is also available. Contact us on WhatsApp at <strong>+92 310 0064795</strong> for tailored measurements.
+            </p>
+        </div>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const boutiqueInventory = {
@@ -76,6 +137,7 @@
                     priceSmall: "Rs. 3,500.00",
                     priceLarge: "Rs. 4,000.00",
                     badge: "",
+                    salePercent: 0,
                     mainImg: "blackmodel.jpeg",
                     details: [
                         "Fabric: Premium Raw Silk shirt and trousers paired with an organza dupatta.",
@@ -89,6 +151,7 @@
                     priceSmall: "Rs. 4,500.00",
                     priceLarge: "Rs. 5,000.00",
                     badge: "",
+                    salePercent: 0,
                     mainImg: "pink.jpg",
                     details: [
                         "Fabric: High-grade pure Shamooz silk with crushed crepe plazo layers.",
@@ -102,6 +165,7 @@
                     priceSmall: "Rs. 3,450.00",
                     priceLarge: "Rs. 3,950.00",
                     badge: "",
+                    salePercent: 0,
                     mainImg: "skinmodel.jpg",
                     details: [
                         "Fabric: Ultra-soft viscose silk blend perfect for lightweight seasonal wear.",
@@ -115,6 +179,7 @@
                     priceSmall: "Rs. 4,500.00",
                     priceLarge: "Rs. 5,000.00",
                     badge: "",
+                    salePercent: 0,
                     mainImg: "brownmodel.jpg",
                     details: [
                         "Fabric: Breathable premium organic cotton plaid knit shirt paired with linen-blend trousers.",
@@ -128,6 +193,7 @@
                     priceSmall: "Rs. 3,000.00",
                     priceLarge: "Rs. 3,500.00",
                     badge: "",
+                    salePercent: 0,
                     mainImg: "greenmodel.jpg",
                     details: [
                         "Fabric: Premium cotton-silk raw base tailored cleanly for kids comfort.",
@@ -141,6 +207,7 @@
                     priceSmall: "Rs. 3,500.00",
                     priceLarge: "Rs. 4,000.00",
                     badge: "",
+                    salePercent: 0,
                     mainImg: "multimodel.jpg",
                     details: [
                         "Fabric: High-definition digitally printed premium Cambric cotton.",
@@ -167,17 +234,44 @@
                 return b === "SOLD OUT" || b === "OUT OF STOCK";
             }
 
+            function parsePriceNum(priceStr) {
+                return parseFloat(String(priceStr).replace(/^Rs\.?\s*/i, '').replace(/,/g, '').trim()) || 0;
+            }
+
             function getPriceForSize(item, sizeLabel) {
                 const isSmallAge = sizeLabel === "1-2 yr" || sizeLabel === "3-4 yr";
-                return isSmallAge ? item.priceSmall : item.priceLarge;
+                const basePriceStr = isSmallAge ? item.priceSmall : item.priceLarge;
+                const baseNum = parsePriceNum(basePriceStr);
+                const salePct = Number(item.salePercent) || 0;
+
+                if (salePct > 0 && baseNum > 0) {
+                    const discountedNum = Math.round(baseNum * (1 - salePct / 100));
+                    return "Rs. " + discountedNum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+                return basePriceStr;
             }
 
             function refreshDisplayedPrice() {
                 const item = boutiqueInventory[dressId];
                 if (!item) return;
 
+                const isSmallAge = selectedSize === "1-2 yr" || selectedSize === "3-4 yr";
+                const originalPriceStr = isSmallAge ? item.priceSmall : item.priceLarge;
+                const salePct = Number(item.salePercent) || 0;
+
                 currentActivePrice = getPriceForSize(item, selectedSize);
-                if (priceEl) priceEl.textContent = currentActivePrice;
+
+                if (priceEl) {
+                    if (salePct > 0) {
+                        priceEl.innerHTML = `
+                            <span style="text-decoration: line-through; color: #888888; font-size: 15px; margin-right: 8px;">${originalPriceStr}</span>
+                            <span style="color: #cc0000; font-weight: bold;">${currentActivePrice}</span>
+                            <span style="background: #cc0000; color: #ffffff; font-size: 11px; padding: 2px 7px; margin-left: 8px; vertical-align: middle;">${salePct}% OFF</span>
+                        `;
+                    } else {
+                        priceEl.textContent = currentActivePrice;
+                    }
+                }
 
                 const soldOut = isItemSoldOut(item);
                 if (stockWarningEl) {
@@ -244,14 +338,20 @@
             }
 
             customProducts.forEach(prod => {
-                boutiqueInventory[prod.id] = {
-                    title: prod.title,
-                    priceSmall: prod.priceSmall || prod.price,
-                    priceLarge: prod.priceLarge || prod.price,
-                    badge: prod.badge || "",
-                    mainImg: prod.mainImg,
-                    details: prod.details || []
-                };
+                if (boutiqueInventory[prod.id]) {
+                    boutiqueInventory[prod.id].badge = prod.badge || "";
+                    boutiqueInventory[prod.id].salePercent = Number(prod.salePercent) || 0;
+                } else {
+                    boutiqueInventory[prod.id] = {
+                        title: prod.title,
+                        priceSmall: prod.priceSmall || prod.price,
+                        priceLarge: prod.priceLarge || prod.price,
+                        badge: prod.badge || "",
+                        salePercent: Number(prod.salePercent) || 0,
+                        mainImg: prod.mainImg,
+                        details: prod.details || []
+                    };
+                }
             });
 
             if (boutiqueInventory[dressId]) {

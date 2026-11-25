@@ -363,7 +363,7 @@ Care: Dry clean recommended" required></textarea>
                 </div>
             </form>
 
-            <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; border-top: 1px solid #eae6e1; padding-top: 20px;">Admin-Added Suits</h3>
+            <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; border-top: 1px solid #eae6e1; padding-top: 20px;">Manage All Boutique Suits (Sales &amp; Stock)</h3>
             <div id="custom-products-list"></div>
         </section>
     </div>
@@ -371,6 +371,15 @@ Care: Dry clean recommended" required></textarea>
         document.addEventListener('DOMContentLoaded', () => {
             const ADMIN_PASS = "maryam123";
             const API_BASE = "/api";
+
+            const DEFAULT_SUITS = [
+                { id: "black-silk", title: "Elegance Festive Edit – Black Silk Suit", price: "Rs. 3,500 – Rs. 4,000", priceSmall: "Rs. 3,500.00", priceLarge: "Rs. 4,000.00", sizes: "1-2Y, 3-4Y, 5-6Y, 7-8Y, 9-10Y", category: "fancy party wear silk", badge: "", salePercent: 0, mainImg: "blackmodel.jpeg", details: ["Fabric: Premium Raw Silk shirt and trousers paired with an organza dupatta."] },
+                { id: "magenta-silk", title: "Elegance Floral Edit – Magenta Silk Shirt & Crushed Plazo Set", price: "Rs. 4,500 – Rs. 5,000", priceSmall: "Rs. 4,500.00", priceLarge: "Rs. 5,000.00", sizes: "1-2Y, 3-4Y, 5-6Y, 7-8Y, 9-10Y", category: "fancy party wear silk", badge: "", salePercent: 0, mainImg: "pink.jpg", details: ["Fabric: High-grade pure Shamooz silk with crushed crepe plazo layers."] },
+                { id: "beige-silk", title: "Elegance Floral Edit – Beige Silk Co-Ord Set", price: "Rs. 3,450 – Rs. 3,950", priceSmall: "Rs. 3,450.00", priceLarge: "Rs. 3,950.00", sizes: "1-2Y, 3-4Y, 5-6Y, 7-8Y, 9-10Y", category: "casual co-ord silk", badge: "", salePercent: 0, mainImg: "skinmodel.jpg", details: ["Fabric: Ultra-soft viscose silk blend perfect for lightweight seasonal wear."] },
+                { id: "plaid-shirt", title: "Elegance Plaid Edit – Shirt & White Trousers", price: "Rs. 4,500 – Rs. 5,000", priceSmall: "Rs. 4,500.00", priceLarge: "Rs. 5,000.00", sizes: "1-2Y, 3-4Y, 5-6Y, 7-8Y, 9-10Y", category: "casual cotton plaid", badge: "", salePercent: 0, mainImg: "brownmodel.jpg", details: ["Fabric: Breathable premium organic cotton plaid knit shirt paired with linen-blend trousers."] },
+                { id: "mint", title: "Elegance Floral Edit – Mint Green Suit", price: "Rs. 3,000 – Rs. 3,500", priceSmall: "Rs. 3,000.00", priceLarge: "Rs. 3,500.00", sizes: "1-2Y, 3-4Y, 5-6Y, 7-8Y, 9-10Y", category: "casual lawn cotton", badge: "", salePercent: 0, mainImg: "greenmodel.jpg", details: ["Fabric: Premium cotton-silk raw base tailored cleanly for kids comfort."] },
+                { id: "vibrant-multi", title: "Elegance Vibrant Edit – Multicolored 2 Piece Suit", price: "Rs. 3,500 – Rs. 4,000", priceSmall: "Rs. 3,500.00", priceLarge: "Rs. 4,000.00", sizes: "1-2Y, 3-4Y, 5-6Y, 7-8Y, 9-10Y", category: "casual cambric printed", badge: "", salePercent: 0, mainImg: "multimodel.jpg", details: ["Fabric: High-definition digitally printed premium Cambric cotton."] }
+            ];
 
             const loginScreen = document.getElementById('login-screen');
             const dashboardScreen = document.getElementById('dashboard-screen');
@@ -543,36 +552,47 @@ Care: Dry clean recommended" required></textarea>
             statusFilter.addEventListener('change', renderOrders);
 
             async function renderCustomProducts() {
-                let products = [];
+                let dbProducts = [];
                 try {
                     const response = await fetch(`${API_BASE}/products`);
-                    if (response.ok) products = await response.json();
+                    if (response.ok) dbProducts = await response.json();
                 } catch (err) {
-                    products = [];
+                    dbProducts = [];
                 }
 
-                if (products.length === 0) {
-                    customProductsList.innerHTML = `<p style="color:#777; font-size:13px;">No custom suits added yet. Use the form above to publish new products.</p>`;
-                    return;
-                }
+                const mergedBuiltIn = DEFAULT_SUITS.map(def => {
+                    const saved = dbProducts.find(p => p.id === def.id);
+                    return saved ? { ...def, ...saved, isBuiltIn: true } : { ...def, isBuiltIn: true };
+                });
 
-                customProductsList.innerHTML = products.map(prod => {
+                const extraCustom = dbProducts.filter(p => !DEFAULT_SUITS.some(def => def.id === p.id));
+                const allProducts = [...mergedBuiltIn, ...extraCustom];
+
+                customProductsList.innerHTML = allProducts.map(prod => {
                     const isSoldOut = (prod.badge || '').toUpperCase() === 'SOLD OUT' || (prod.badge || '').toUpperCase() === 'OUT OF STOCK';
+                    const salePct = Number(prod.salePercent) || 0;
+
                     return `
                         <div class="prod-item-card">
                             <div style="display:flex; align-items:center; gap:14px;">
                                 <img src="${prod.mainImg}" alt="${prod.title}" style="width:55px; height:70px; object-fit:cover; border:1px solid #eae6e1;">
                                 <div>
                                     <strong>${prod.title}</strong>
-                                    ${isSoldOut ? `<span class="sold-out-tag">SOLD OUT</span>` : (prod.badge ? `<span style="font-size:11px; background:#f7cbd7; padding:2px 6px; margin-left:6px; font-weight:bold;">${prod.badge}</span>` : '')}
+                                    ${prod.isBuiltIn ? `<span style="font-size:10px; background:#eae6e1; color:#555; padding:2px 6px; margin-left:6px; text-transform:uppercase;">Built-In</span>` : ''}
+                                    ${isSoldOut ? `<span class="sold-out-tag">SOLD OUT</span>` : ''}
+                                    ${salePct > 0 ? `<span style="font-size:10px; background:#128c7e; color:#fff; padding:2px 7px; margin-left:6px; font-weight:bold;">${salePct}% OFF SALE</span>` : ''}
                                     <div style="font-size:12px; color:#555; margin-top:4px;">${prod.price} &nbsp;|&nbsp; Sizes: ${prod.sizes}</div>
                                 </div>
                             </div>
-                            <div style="display:flex; align-items:center; gap:12px;">
+                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                <input type="number" id="sale-input-${prod.id}" min="0" max="90" value="${salePct}" placeholder="Sale %" style="width:68px; padding:6px 8px; border:1px solid #ccc; font-size:12px;" title="Enter discount % (0 to remove sale)">
+                                <button type="button" class="toggle-stock-btn" onclick="applyProductSale('${prod.id}')">
+                                    ${salePct > 0 ? 'Update Sale' : 'Apply Sale %'}
+                                </button>
                                 <button type="button" class="toggle-stock-btn" onclick="toggleSoldOut('${prod.id}', ${isSoldOut})">
                                     ${isSoldOut ? 'Mark In Stock' : 'Mark Sold Out'}
                                 </button>
-                                <button type="button" class="delete-order-btn" style="margin-top:0;" onclick="deleteCustomProduct('${prod.id}')">Remove</button>
+                                ${!prod.isBuiltIn ? `<button type="button" class="delete-order-btn" style="margin-top:0;" onclick="deleteCustomProduct('${prod.id}')">Remove</button>` : ''}
                             </div>
                         </div>
                     `;
@@ -611,6 +631,7 @@ Care: Dry clean recommended" required></textarea>
                         sizes: sizes,
                         category: category,
                         badge: badge,
+                        salePercent: 0,
                         mainImg: event.target.result,
                         details: detailsArray
                     };
@@ -631,6 +652,25 @@ Care: Dry clean recommended" required></textarea>
                 };
                 reader.readAsDataURL(imageFile);
             });
+
+            window.applyProductSale = async function(prodId) {
+                const inputEl = document.getElementById(`sale-input-${prodId}`);
+                const salePercent = Math.max(0, Math.min(90, parseFloat(inputEl?.value) || 0));
+
+                try {
+                    const res = await fetch(`${API_BASE}/products/${prodId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ salePercent })
+                    });
+                    if (res.ok) {
+                        alert(salePercent > 0 ? `${salePercent}% Extra Sale applied to this suit!` : "Sale discount removed.");
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+                renderCustomProducts();
+            };
 
             window.toggleSoldOut = async function(prodId, currentlySoldOut) {
                 const newBadge = currentlySoldOut ? "" : "SOLD OUT";
