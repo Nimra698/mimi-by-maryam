@@ -15,10 +15,14 @@
         <b>EXTRA 2% OFF WITH PREPAID ORDERS | FREE SHIPPING OVER RS. 5,000</b>
     </div>
     
-    <!-- Clickable Custom-Made Outfit Banner -->
-    <div id="custom-order-trigger" class="announcement-bar" style="background-color: #ffffff; color: #222222; border-bottom: 1px solid #eaeaea; cursor: pointer;" title="Click to request a custom-made outfit">
+    <!-- Direct WhatsApp Link Banner for Custom-Made Outfits -->
+    <a id="whatsapp-custom-banner"
+       href="#"
+       class="announcement-bar" 
+       style="display: block; background-color: #ffffff; color: #222222; border-bottom: 1px solid #eaeaea; text-decoration: none; cursor: pointer;" 
+       title="Chat with MIMI BY MARYAM on WhatsApp">
         <b>FOR CUSTOM-MADE OUTFITS, DROP US A LINE AT: [+92 310 0064795] &nbsp;<u>(Click Here to Customize)</u></b>
-    </div>
+    </a>
 
     <!-- Navigation Header -->
     <header class="main-header">
@@ -146,41 +150,6 @@
         </div>
     </div>
 
-    <!-- Custom-Made Outfit Inquiry Modal -->
-    <div id="custom-outfit-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.55); z-index: 2000; justify-content: center; align-items: center; padding: 20px;">
-        <div style="background-color: #ffffff; max-width: 500px; width: 100%; padding: 35px 30px; border: 1px solid #eae6e1; position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); max-height: 90vh; overflow-y: auto;">
-            <button type="button" id="close-custom-modal" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 22px; cursor: pointer; color: #222222;">✕</button>
-            
-            <h2 style="font-size: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; color: #111111;">Custom-Made Outfit Request</h2>
-            <p style="font-size: 12px; color: #777777; margin-bottom: 20px;">Share your child's age, color choice, and measurements to order a tailored dress.</p>
-
-            <form id="custom-outfit-form">
-                <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;">Your Name *</label>
-                    <input type="text" id="custom-cust-name" placeholder="Enter your name" required style="width: 100%; padding: 10px 12px; border: 1px solid #dcdcdc; font-size: 13px;">
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
-                    <div>
-                        <label style="display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;">Child's Age *</label>
-                        <input type="text" id="custom-child-age" placeholder="e.g. 4 Years" required style="width: 100%; padding: 10px 12px; border: 1px solid #dcdcdc; font-size: 13px;">
-                    </div>
-                    <div>
-                        <label style="display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;">Preferred Color / Fabric *</label>
-                        <input type="text" id="custom-fabric-color" placeholder="e.g. Pastel Pink Silk" required style="width: 100%; padding: 10px 12px; border: 1px solid #dcdcdc; font-size: 13px;">
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;">Design Notes / Reference Details *</label>
-                    <textarea id="custom-notes" rows="3" placeholder="Describe style, sleeves, embroidery, or paste a reference link..." required style="width: 100%; padding: 10px 12px; border: 1px solid #eae6e1; font-size: 13px;"></textarea>
-                </div>
-
-                <button type="submit" style="width: 100%; background-color: #1a1715; color: #ffffff; border: none; padding: 14px; font-size: 12px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;">Send Custom Order on WhatsApp</button>
-            </form>
-        </div>
-    </div>
-
     <script src="Script.js"></script>
     <script>
         function updateHomeBagBadge() {
@@ -191,48 +160,19 @@
                 bagBtn.textContent = `BAG (${totalQty})`;
             }
         }
-        document.addEventListener('DOMContentLoaded', updateHomeBagBadge);
+        document.addEventListener('DOMContentLoaded', () => {
+            updateHomeBagBadge();
+
+            const waBanner = document.getElementById('whatsapp-custom-banner');
+            if (waBanner) {
+                const phone = "923100064795";
+                const text = encodeURIComponent("Assalam-o-Alaikum MIMI BY MARYAM! I would like to inquire about a custom-made outfit.");
+                waBanner.href = "https://api." + "://whatsapp.com" + phone + "&text=" + text;
+                waBanner.target = "_blank";
+                waBanner.rel = "noopener noreferrer";
+            }
+        });
         window.addEventListener('pageshow', updateHomeBagBadge);
-
-        const customTrigger = document.getElementById('custom-order-trigger');
-        const customModal = document.getElementById('custom-outfit-modal');
-        const closeCustomModal = document.getElementById('close-custom-modal');
-        const customForm = document.getElementById('custom-outfit-form');
-
-        if (customTrigger && customModal) {
-            customTrigger.addEventListener('click', (e) => {
-                e.preventDefault();
-                customModal.style.display = 'flex';
-            });
-        }
-        if (closeCustomModal && customModal) {
-            closeCustomModal.addEventListener('click', () => {
-                customModal.style.display = 'none';
-            });
-            customModal.addEventListener('click', (e) => {
-                if (e.target === customModal) customModal.style.display = 'none';
-            });
-        }
-        if (customForm) {
-            customForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const name = document.getElementById('custom-cust-name')?.value || '';
-                const age = document.getElementById('custom-child-age')?.value || '';
-                const color = document.getElementById('custom-fabric-color')?.value || '';
-                const notes = document.getElementById('custom-notes')?.value || '';
-                const msg = encodeURIComponent(
-                    "Assalam-o-Alaikum Mimi by Maryam! I'd like to place a Custom Outfit Order:\n" +
-                    "• Name: " + name + "\n" +
-                    "• Child Age: " + age + "\n" +
-                    "• Color/Fabric: " + color + "\n" +
-                    "• Details: " + notes
-                );
-                const whatsappNumber = "923100064795";
-                const whatsappUrl = "https://whatsapp.com" + whatsappNumber + "&text=" + msg;
-                window.open(whatsappUrl, '_blank');
-                customModal.style.display = 'none';
-            });
-        }
     </script>
 </body>
 </html>
