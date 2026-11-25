@@ -142,6 +142,39 @@
         </section>
     </main>
 
+    <!-- Boutique Footer & Custom-Made Outfits Section -->
+    <footer style="background-color: #ffffff; border-top: 1px solid #eae6e1; padding: 50px 20px 30px 20px; text-align: center; color: #222222; margin-top: 40px;">
+        <div style="max-width: 650px; margin: 0 auto 30px auto; padding-bottom: 28px; border-bottom: 1px solid #eae6e1;">
+            <h3 style="font-size: 15px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; color: #111111;">Custom-Made Outfits for All Ages</h3>
+            <p style="font-size: 13px; color: #555555; line-height: 1.7; margin-bottom: 16px;">
+                Looking for a bespoke design, custom color, or tailored measurements? Every MIMI BY MARYAM outfit can be custom-crafted to your exact preferences for kids of all ages. Share your design ideas with us on WhatsApp and our atelier will bring your vision to life.
+            </p>
+            <a id="footer-whatsapp-btn" href="#" style="display: inline-flex; align-items: center; gap: 8px; background-color: #25d366; color: #ffffff; padding: 10px 20px; border-radius: 25px; font-size: 13px; font-weight: bold; text-decoration: none; box-shadow: 0 3px 10px rgba(0,0,0,0.12);">
+                Message us on WhatsApp (+92 310 0064795)
+            </a>
+        </div>
+
+        <ul style="list-style: none; padding: 0; margin: 0 0 28px 0; font-size: 13px; line-height: 2.2; color: #444444;">
+            <li><a href="#collection" style="color: inherit; text-decoration: none;">All Collections</a></li>
+            <li><a href="#collection" class="filter-link" data-filter="casual" style="color: inherit; text-decoration: none;">Casual Edit</a></li>
+            <li><a href="#collection" class="filter-link" data-filter="fancy" style="color: inherit; text-decoration: none;">Luxury Festive</a></li>
+            <li><a href="Product.html" style="color: inherit; text-decoration: none;">Kids Size Chart</a></li>
+            <li><a href="cart.html" style="color: inherit; text-decoration: none;">Shipping &amp; Delivery Policy</a></li>
+            <li><a id="footer-contact-link" href="#" style="color: inherit; text-decoration: none;">Contact Us</a></li>
+        </ul>
+
+        <div style="border-top: 1px solid #eae6e1; padding-top: 20px; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; flex-wrap: wrap; gap: 10px; font-size: 12px; color: #777777;">
+            <span>© 2026 MIMI BY MARYAM. All Rights Reserved.</span>
+            <span>Handcrafted Kids Luxury • Vehari, Pakistan</span>
+        </div>
+    </footer>
+
+    <!-- Floating Bottom-Left WhatsApp "Message us" Pill -->
+    <a id="floating-whatsapp-pill" href="#" style="position: fixed; bottom: 20px; left: 20px; z-index: 1500; display: inline-flex; align-items: center; gap: 10px; background-color: #ffffff; color: #111111; padding: 8px 16px 8px 10px; border-radius: 30px; box-shadow: 0 4px 14px rgba(0,0,0,0.16); text-decoration: none; font-size: 13px; font-weight: 600; border: 1px solid #eae6e1;">
+        <span style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background-color: #25d366; color: #ffffff; font-size: 16px; font-weight: bold;">W</span>
+        <span>Message us</span>
+    </a>
+
     <!-- Search Overlay Form Block Component -->
     <div id="search-overlay" class="search-overlay-hidden">
         <div class="search-container">
@@ -163,14 +196,20 @@
         document.addEventListener('DOMContentLoaded', () => {
             updateHomeBagBadge();
 
-            const waBanner = document.getElementById('whatsapp-custom-banner');
-            if (waBanner) {
-                const phone = "923100064795";
-                const text = encodeURIComponent("Assalam-o-Alaikum MIMI BY MARYAM! I would like to inquire about a custom-made outfit.");
-                waBanner.href = "https://api." + "://whatsapp.com" + phone + "&text=" + text;
-                waBanner.target = "_blank";
-                waBanner.rel = "noopener noreferrer";
-            }
+            const phone = "923100064795";
+            const text = encodeURIComponent("Assalam-o-Alaikum MIMI BY MARYAM! I would like to inquire about a custom-made outfit.");
+            const domain = ["api", "whatsapp", "com"].join(".");
+            const fullWaUrl = "https://" + domain + "/send?phone=" + phone + "&text=" + text;
+
+            const waIds = ['whatsapp-custom-banner', 'footer-whatsapp-btn', 'footer-contact-link', 'floating-whatsapp-pill'];
+            waIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.href = fullWaUrl;
+                    el.target = "_blank";
+                    el.rel = "noopener noreferrer";
+                }
+            });
         });
         window.addEventListener('pageshow', updateHomeBagBadge);
     </script>
